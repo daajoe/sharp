@@ -24,7 +24,8 @@ namespace sharp
 		virtual const ITupleSet &at(htd::vertex_t node) const override;
 
 		virtual bool contains(htd::vertex_t node) const override;
-
+		
+		virtual void clear();
 	}; // class NodeTupleSetMap
 
 } // namespace sharp

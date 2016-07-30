@@ -29,8 +29,11 @@ namespace sharp
 
 		virtual ~ITupleSet() = 0;
 
+ 		virtual ITuple* operator[](int pos)=0;
+
 		virtual std::pair<iterator, bool> insert(ITuple *tuple) = 0;
 		virtual size_type erase(const ITuple &tuple) = 0;
+		virtual void erase(const size_t pos) = 0;
 		virtual IEnumerator<ITuple> *enumerate() = 0;
 		virtual iterator begin() = 0;
 		virtual iterator end() = 0;

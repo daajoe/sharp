@@ -33,23 +33,25 @@ namespace sharp
 	TupleToTreeAlgorithmAdapter::evaluateNode(
 			vertex_t node,
 			const ITreeDecomposition &decomposition,
-			const INodeTableMap &tables,
+			INodeTableMap &tables,
 			const IInstance &instance) const
 	{
-		TupleSet *newTable = new TupleSet();
+		INodeTupleSetMap& tab = dynamic_cast<INodeTupleSetMap &>(tables);
+		ITupleSet *newTable = tables.contains(node) ? &tab[node] : new TupleSet();
 
 		algorithm_.evaluateNode(
 				node,
 				decomposition,
-				dynamic_cast<const INodeTupleSetMap &>(tables),
+				tab,
 				instance,
 				*newTable);
 
-		if(newTable->size() == 0)
+		//TODO: sometimes required?
+		/*if(newTable->size() == 0)
 		{
 			delete newTable;
 			return nullptr;
-		}
+		}*/
 		return newTable;
 	}
 

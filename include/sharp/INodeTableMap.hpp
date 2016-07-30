@@ -25,6 +25,8 @@ namespace sharp
 
 		virtual bool contains(htd::vertex_t node) const = 0;
 
+		virtual void clear() = 0;
+
 	}; // class INodeTableMap
 
 	inline INodeTableMap::~INodeTableMap() { }

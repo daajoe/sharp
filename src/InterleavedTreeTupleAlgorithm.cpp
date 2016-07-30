@@ -36,26 +36,26 @@ namespace sharp
 	void InterleavedTreeTupleAlgorithm::evaluateNode(
 			vertex_t node,
 			const ITreeDecomposition &decomposition,
-			const INodeTupleSetMap &tuples,
+			INodeTupleSetMap &tuples,
 			const IInstance &instance,
 			ITupleSet &outputTuples) const
 	{
-		TupleSet intermediateOutputTuples;
+		//TupleSet intermediateOutputTuples;
 
 		algorithm1_.evaluateNode(
 				node,
 				decomposition,
 				tuples,
-				instance,
-				intermediateOutputTuples);
+				instance, outputTuples);
+				//intermediateOutputTuples);
 
-		NodeTupleSetMapOverlay overlay(tuples, node, intermediateOutputTuples);
+		NodeTupleSetMapOverlay overlay(tuples, node, outputTuples); //intermediateOutputTuples);
 
 		algorithm2_.evaluateNode(
 				node,
 				decomposition,
 				overlay,
-				instance,
+				instance, 
 				outputTuples);
 	}
 

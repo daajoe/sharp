@@ -24,6 +24,8 @@ namespace sharp
 		virtual const ITupleSet &operator[](htd::vertex_t node) const = 0;
 		virtual const ITupleSet &at(htd::vertex_t node) const = 0;
 
+		virtual void clear() = 0;
+
 	}; // class INodeTupleSetMap
 
 	inline INodeTupleSetMap::~INodeTupleSetMap() { }

@@ -14,19 +14,19 @@ namespace sharp
 		Hash();
 		~Hash();
 
-		void add(size_t data);
 		void add(std::uint_least32_t data);
+		void add(size_t data);
 		void add(unsigned char data);
 		void reset();
 
-		void addUnordered(size_t data);
 		void addUnordered(std::uint_least32_t data);
+		void addUnordered(size_t data);
 		void addUnordered(unsigned char data);
 		void incorporateUnordered();
 		void resetUnordered();
 
 		size_t get() const;
-		size_t getUnordered() const;
+		size_t getUnordered(); //const;
 
 	private:
 		size_t hash_;

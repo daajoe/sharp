@@ -3,6 +3,7 @@
 #endif
 
 #include "TupleSet.hpp"
+#include <cassert>
 
 namespace sharp
 {
@@ -27,6 +28,17 @@ namespace sharp
 						set_.begin() + set_.size() - 2, set_.end())), true);
 	}
 
+	ITuple* TupleSet::operator[](int pos)
+	{
+		return set_[pos];
+	}
+
+	void TupleSet::erase(const size_t pos)
+	{
+		assert(pos < set_.size());
+		set_.erase(set_.begin() + pos);
+	}
+
 	TupleSet::size_type TupleSet::erase(const ITuple &tuple)
 	{
 		//FIXME: this is inefficient
@@ -34,8 +46,11 @@ namespace sharp
 		for(size_t i = 0; i < set_.size(); ++i)
 			if(set_[i] == (ITuple *)&tuple)
 			{
-				set_.erase(set_.begin() + i);
+				std::swap(*(set_.begin() + i), *(set_.end() - 1));
+				set_.pop_back();
+				//set_.erase(set_.begin() + i);
 				++ret;
+				break;
 			}
 
 		return ret;

@@ -19,6 +19,7 @@ namespace sharp
 		virtual ~ITuple() = 0;
 
 		virtual std::size_t hash() const = 0;
+		//virtual void forceSolution() = 0;
 		virtual bool operator==(const ITuple &other) const = 0;
 
 	}; // class ITuple

@@ -29,7 +29,7 @@ namespace sharp
 			virtual ITable *evaluateNode(
 					htd::vertex_t node,
 					const htd::ITreeDecomposition &decomposition,
-					const INodeTableMap &tables,
+					INodeTableMap &tables,
 					const IInstance &instance) const override;
 
 			virtual bool needAllTables() const override;

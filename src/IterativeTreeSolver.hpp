@@ -72,7 +72,7 @@ namespace sharp
 		virtual ~IterativeTreeSolver() override;
 
 		virtual htd::ITreeDecomposition *decompose(
-				const IInstance &instance) const override;
+				const IInstance &instance, bool weak, unsigned int maxChild, bool optimizeTD) const override;
 
 		virtual ISolution *solve(const IInstance &instance) const override;
 

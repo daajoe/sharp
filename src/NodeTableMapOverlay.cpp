@@ -21,12 +21,12 @@ namespace sharp
 
 	ITable &NodeTableMapOverlay::operator[](vertex_t)
 	{
-		throw std::runtime_error("Unimplemented function!");
+		throw std::runtime_error("Unimplemented function! 3");
 	}
 
 	ITable &NodeTableMapOverlay::at(vertex_t)
 	{
-		throw std::runtime_error("Unimplemented function!");
+		throw std::runtime_error("Unimplemented function! 4");
 	}
 
 	const ITable &NodeTableMapOverlay::operator[](vertex_t node) const
@@ -41,6 +41,12 @@ namespace sharp
 		if(node == node_)
 			return replacement_;
 		return map_.at(node);
+	}
+
+	void NodeTableMapOverlay::clear()
+	{
+		//TODO: nasty!
+		const_cast<INodeTableMap&>(map_).clear();
 	}
 
 	bool NodeTableMapOverlay::contains(vertex_t node) const

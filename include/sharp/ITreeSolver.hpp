@@ -18,7 +18,7 @@ namespace sharp
 		virtual ~ITreeSolver() = 0;
 
 		virtual htd::ITreeDecomposition *decompose(
-				const IInstance &instance) const = 0;
+				const IInstance &instance, bool weak, unsigned int maxChild, bool optimizeTD) const = 0;
 
 		virtual ISolution *solve(
 				const IInstance &instance,

@@ -28,6 +28,11 @@ namespace sharp
 		return static_cast<ITupleSet &>(this->NodeTableMap::at(node));
 	}
 
+	void NodeTupleSetMap::clear() 
+	{
+		this->NodeTableMap::clear();
+	}
+
 	const ITupleSet &NodeTupleSetMap::operator[](vertex_t node) const
 	{
 		return static_cast<const ITupleSet &>(

@@ -17,14 +17,23 @@ namespace sharp
 
 	NodeTupleSetMapOverlay::~NodeTupleSetMapOverlay() { }
 
-	ITupleSet &NodeTupleSetMapOverlay::operator[](vertex_t)
+	ITupleSet &NodeTupleSetMapOverlay::operator[](vertex_t /*node*/)
 	{
-		throw std::runtime_error("Unimplemented function!");
+		/*if(node == node_)
+			return replacement_;
+		return map_[node];*/
+		throw std::runtime_error("Unimplemented function 1!");
+	}
+
+	void NodeTupleSetMapOverlay::clear()
+	{
+		//TODO: nasty!
+		const_cast<INodeTupleSetMap&>(map_).clear();
 	}
 
 	ITupleSet &NodeTupleSetMapOverlay::at(vertex_t)
 	{
-		throw std::runtime_error("Unimplemented function!");
+		throw std::runtime_error("Unimplemented function 2!");
 	}
 
 	const ITupleSet &NodeTupleSetMapOverlay::operator[](vertex_t node) const

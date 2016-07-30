@@ -25,7 +25,7 @@ namespace sharp
 		virtual void evaluateNode(
 				htd::vertex_t node,
 				const htd::ITreeDecomposition &decomposition,
-				const INodeTupleSetMap &tuples,
+				INodeTupleSetMap &tuples,
 				const IInstance &instance,
 				ITupleSet &outputTuples) const override;
 

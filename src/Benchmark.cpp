@@ -15,6 +15,8 @@
 
 namespace sharp
 {
+	bool Benchmark::exit = false;
+
 	using std::deque;
 	using std::string;
 	using std::endl;
@@ -37,6 +39,17 @@ namespace sharp
 		cpuClock_.push_front(cpu);
 		names_.push_front(name);
 	}
+
+	/*void Benchmark::registerTimestamp(const std::string &name, const std::string &baseTimestamp)
+	{
+		struct tms cpu;
+		clock_t wall = times(&cpu);
+
+		wallClock_.push_front(wall);
+		cpuClock_.push_front(cpu);
+		names_.push_front(name);
+	}*/
+
 
 	void Benchmark::printBenchmarks(std::ostream &out, bool csv)
 	{

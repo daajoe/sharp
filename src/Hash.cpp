@@ -4,6 +4,7 @@
 
 #include <sharp/Hash.hpp>
 #include <climits>
+#include <cassert>
 
 namespace sharp
 {
@@ -31,17 +32,16 @@ namespace sharp
 
 	Hash::~Hash() { }
 
-	void Hash::add(size_t data)
+	void Hash::add(uint_least32_t data)
 	{
-		size_t size = sizeof(size_t);
-
+		size_t size = sizeof(uint_least32_t);
 		for(size_t shift = 0; shift < size; ++shift)
 			this->add((unsigned char) (data >> (shift * CHUNK_SIZE)));
 	}
 
-	void Hash::add(uint_least32_t data)
+	void Hash::add(size_t data)
 	{
-		size_t size = sizeof(uint_least32_t);
+		size_t size = sizeof(size_t);
 
 		for(size_t shift = 0; shift < size; ++shift)
 			this->add((unsigned char) (data >> (shift * CHUNK_SIZE)));
@@ -59,27 +59,35 @@ namespace sharp
 		hash_ = HASH_OFFSET;
 	}
 
-	void Hash::addUnordered(size_t data)
-	{
-		Hash h;
-		h.add(data);
-		unorderedXor_ ^= h.get();
-		unorderedSum_ += h.get();
-	}
-
 	void Hash::addUnordered(uint_least32_t data)
 	{
-		Hash h;
-		h.add(data);
-		unorderedXor_ ^= h.get();
-		unorderedSum_ += h.get();
+		size_t hashtmp = hash_;
+		reset();
+		add(data);
+		unorderedXor_ ^= get();
+		unorderedSum_ += get();
+		hash_ = hashtmp;
 	}
+
+
+	void Hash::addUnordered(size_t data)
+	{
+		size_t hashtmp = hash_;
+		reset();
+		add(data);
+		unorderedXor_ ^= get();
+		unorderedSum_ += get();
+		hash_ = hashtmp;
+	}
+
 	void Hash::addUnordered(unsigned char data)
 	{
-		Hash h;
-		h.add(data);
-		unorderedXor_ ^= h.get();
-		unorderedSum_ += h.get();
+		size_t hashtmp = hash_;
+		reset();
+		add(data);
+		unorderedXor_ ^= get();
+		unorderedSum_ += get();
+		hash_ = hashtmp;
 	}
 
 	void Hash::incorporateUnordered()
@@ -97,15 +105,19 @@ namespace sharp
 
 	size_t Hash::get() const
 	{
+		//assert(false);
 		return hash_;
 	}
 
-	size_t Hash::getUnordered() const
+	size_t Hash::getUnordered() //const
 	{
-		Hash h;
-		h.add(unorderedXor_);
-		h.add(unorderedSum_);
-		return h.get();
+		size_t hashtmp = hash_;
+		reset();
+		add(unorderedXor_);
+		add(unorderedSum_);
+		size_t retHash = get();
+		hash_ = hashtmp;
+		return retHash;
 	}
 
 } // namespace sharp

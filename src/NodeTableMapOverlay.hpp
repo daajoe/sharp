@@ -22,7 +22,7 @@ namespace sharp
 		virtual const ITable &at(htd::vertex_t node) const override;
 
 		virtual bool contains(htd::vertex_t node) const override;
-
+		virtual void clear();
 	private:
 		const INodeTableMap &map_;
 		htd::vertex_t node_;

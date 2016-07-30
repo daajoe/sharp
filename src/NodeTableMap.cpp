@@ -26,6 +26,11 @@ namespace sharp
 	{
 		return this->at(node);
 	}
+
+	void NodeTableMap::clear()
+	{
+		map_.clear();
+	}
 	
 	ITable &NodeTableMap::at(vertex_t node)
 	{
@@ -75,7 +80,7 @@ namespace sharp
 	bool NodeTableMap::contains(vertex_t node) const
 	{
 		auto existingEntry = map_.find(node);
-		return existingEntry == map_.end();
+		return existingEntry != map_.end();
 	}
 
 } // namespace sharp

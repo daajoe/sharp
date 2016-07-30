@@ -12,6 +12,7 @@ namespace sharp
 
 	public:
 		virtual ~ITable() = 0;
+		//virtual void forceSolution() = 0;
 
 	}; // class ITable
 

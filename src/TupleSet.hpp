@@ -17,12 +17,14 @@ namespace sharp
 
 		virtual std::pair<iterator, bool> insert(ITuple *tuple);
 		virtual size_type erase(const ITuple &tuple);
+		virtual void erase(const size_t pos);
 		virtual IEnumerator<ITuple> *enumerate();
 		virtual iterator begin();
 		virtual iterator end();
 		virtual iterator find(const ITuple &tuple);
 
 		virtual size_type size() const;
+		virtual ITuple* operator[](int pos);
 		virtual bool contains(const ITuple &tuple) const;
 		virtual IConstEnumerator<ITuple> *enumerate() const;
 		virtual const_iterator begin() const;

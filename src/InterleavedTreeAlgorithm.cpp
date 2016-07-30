@@ -35,7 +35,7 @@ namespace sharp
 	ITable *InterleavedTreeAlgorithm::evaluateNode(
 			vertex_t node,
 			const ITreeDecomposition &decomposition,
-			const INodeTableMap &tables,
+			INodeTableMap &tables,
 			const IInstance &instance) const
 	{
 		unique_ptr<ITable> table1(algorithm1_.evaluateNode(
