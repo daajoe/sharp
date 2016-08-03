@@ -14,11 +14,14 @@
 #include <htd/WeakNormalizationOperation.hpp>
 #include <htd/LimitChildCountOperation.hpp>
 #include <htd/TreeDecompositionVerifier.hpp>
-#include <htd/TreeDecompositionOptimizationOperation.hpp>
 
 #include <stack>
 #include <memory>
 #include <cstddef>
+
+
+#include <htd/main.hpp>
+#include <chrono>
 
 namespace sharp
 {
@@ -153,7 +156,7 @@ namespace sharp
 				/**
 				  * Here we specify the fitness evaluation for a given decomposition. In this case, we select the maximum bag size and the height.
 				  */
-				return new htd::FitnessEvaluation(2, -(double)(decomposition.maximumBagSize()), -(double)(decomposition.height()));
+				return new htd::FitnessEvaluation(1, (double)(decomposition.maximumBagSize()));
 			}
 
 			FitnessFunction * clone(void) const
@@ -162,7 +165,9 @@ namespace sharp
 			}
 	};
 
-	
+
+//#define ITERATIVE_TD_IMPROVEMENT
+
 	ITreeDecomposition *IterativeTreeSolver::decompose(
 			const IInstance &instance, bool weak, unsigned int maxChilds, bool optimizedTD) const
 	{
@@ -193,9 +198,11 @@ namespace sharp
         /**
           * Set desired manipulations like in any other decomposition algorithm.
           */
-		  
-		operation->addManipulationOperation(new htd::WeakNormalizationOperation());
+	if (maxChilds >= 2)
 		operation->addManipulationOperation(new htd::LimitChildCountOperation(maxChilds));
+	if (weak) 
+		operation->addManipulationOperation(new htd::WeakNormalizationOperation());
+
         //operation->addManipulationOperation(new htd::NormalizationOperation(true, true, false, false));
 
         /**
@@ -267,8 +274,8 @@ namespace sharp
 		
 		td = decomposer_.computeDecomposition(*hg);
 	
-		htd::PreOrderTreeTraversal traversal;
-		traversal.traverse(*td, [&](htd::vertex_t v, htd::vertex_t v2, size_t s){ std::cout << v << "[" << v2 << "]" << " @" << s << ": " << td->bagContent(v) << std::endl; });
+		/*htd::PreOrderTreeTraversal traversal;
+		traversal.traverse(*td, [&](htd::vertex_t v, htd::vertex_t v2, size_t s){ std::cout << v << "[" << v2 << "]" << " @" << s << ": " << td->bagContent(v) << std::endl; });*/
 
 		//TODO: remove joinnodereplacementoperation
 		//htd::JoinNodeReplacementOperation j;
@@ -285,11 +292,13 @@ namespace sharp
 		
 		htd::TreeDecompositionVerifier v;
 		assert(v.verify(*hg, *td));
-		
+		/*
 		std::cout << std::endl << "AFTER NORMALIZATION" << std::endl << std::endl;
-		traversal.traverse(*td, [&](htd::vertex_t v, htd::vertex_t v2, size_t s){ std::cout << v << "[" << v2 << "]" << " @" << s << ": " << td->bagContent(v) << std::endl; });
+		traversal.traverse(*td, [&](htd::vertex_t v, htd::vertex_t v2, size_t s){ std::cout << v << "[" << v2 << "]" << " @" << s << ": " << td->bagContent(v) << std::endl; });*/
 		}
 		Benchmark::registerTimestamp("tree decomposition time");
+		assert(td->maximumBagSize() <= 15);
+		//assert(td->maximumBagSize() - 1 <= 15);
 		return td;
 	}
 

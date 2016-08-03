@@ -5,6 +5,7 @@
 
 #include <iostream>
 #include <string>
+#include <mutex>
 
 namespace sharp
 {
@@ -18,6 +19,7 @@ namespace sharp
 	private:
 		Benchmark();
 		static bool exit;
+		static std::mutex lock;
 	};
 
 } // namespace sharp
