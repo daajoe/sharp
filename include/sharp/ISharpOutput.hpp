@@ -1,5 +1,5 @@
 /* 
- * File:   IMutableDirectedGraph.hpp
+ * File:   ISharpOutput.hpp
  *
  * Author: FICHTE Johannes (fichte@dbai.tuwien.ac.at)
  * 
@@ -22,25 +22,28 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-//#include <htd/ITreeDecomposition.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
 
-namespace sharp
-{
+//#include <dynasp/global>
+//#include <string>
+
+namespace sharp {
     using htd::ITreeDecomposition;
 
-    class ISharpOutput
-    {
-        public:
-//            ~ISharpOutput() = 0;
+    class ISharpOutput {
+    public:
+        virtual ~ISharpOutput() = 0;
 
-            virtual void decomposition(std::string key, ITreeDecomposition* td);
-            virtual void decomposition(ITreeDecomposition* td);
-            virtual void key_value(std::string key,std::string value);
-            virtual void comment(std::string value);
+        virtual void decomposition(const std::string &key, ITreeDecomposition *td);
+
+        virtual void decomposition(ITreeDecomposition &td);
+
+        virtual void key_value(const std::string &key, const std::string &value);
+
+        virtual void comment(const std::string &value);
 
     };
 
-//    inline sharp::ISharpOutput::~ISharpOutput() {}
+    inline ISharpOutput::~ISharpOutput() {}
 }
 

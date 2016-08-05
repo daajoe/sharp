@@ -59,7 +59,9 @@ libsharp_la_include_HEADERS = \
 	include/sharp/EnumeratorSkeleton.hpp \
 	include/sharp/Hasher.hpp \
 	include/sharp/Hash.hpp
-
+	\
+	include/sharp/ISharpOutput.hpp \
+    include/sharp/TextOutput.hpp
 
 # list all source code files for the libsharp.la library
 libsharp_la_SOURCES = \
@@ -96,7 +98,10 @@ libsharp_la_SOURCES = \
 	src/TupleSet.hpp \
 	\
 	src/util/errorhandling.cpp \
-	src/util/errorhandling.hpp
+	src/util/errorhandling.hpp\
+	\
+    src/TextOutput.cpp
+
 
 # tell automake that the installation directory for public header files of the
 # libdynasp.la library should be a subfolder in the default ${includedir}

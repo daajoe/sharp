@@ -30,17 +30,16 @@ namespace sharp {
     public:
         TextOutput(void);
 
-        virtual ~TextOutput();
+        ~TextOutput();
 
-        void decomposition(std::string key, htd::ITreeDecomposition* td);
-        void decomposition(htd::ITreeDecomposition* td);
+        void decomposition(const std::string &key, htd::ITreeDecomposition *td);
 
-        void key_value(std::string key, std::string value);
+        void decomposition(htd::ITreeDecomposition &td);
 
-        void comment(std::string value);
+        void key_value(const std::string &key, const std::string &value);
+
+        void comment(const std::string &value);
 
     };
-
-    inline sharp::TextOutput::~TextOutput() {}
 }
 

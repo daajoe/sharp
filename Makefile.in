@@ -154,7 +154,7 @@ am_libsharp_la_OBJECTS = src/assembly.lo src/ITuple.lo \
 	src/NodeTableMap.lo src/NodeTableMapOverlay.lo \
 	src/NodeTupleSetMap.lo src/NodeTupleSetMapOverlay.lo \
 	src/NullTreeSolutionExtractor.lo src/TupleSet.lo \
-	src/util/errorhandling.lo
+	src/util/errorhandling.lo src/TextOutput.lo
 libsharp_la_OBJECTS = $(am_libsharp_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
@@ -524,7 +524,9 @@ libsharp_la_SOURCES = \
 	src/TupleSet.hpp \
 	\
 	src/util/errorhandling.cpp \
-	src/util/errorhandling.hpp
+	src/util/errorhandling.hpp\
+	\
+    src/TextOutput.cpp
 
 
 # tell automake that the installation directory for public header files of the
@@ -699,6 +701,7 @@ src/util/$(DEPDIR)/$(am__dirstamp):
 	@: > src/util/$(DEPDIR)/$(am__dirstamp)
 src/util/errorhandling.lo: src/util/$(am__dirstamp) \
 	src/util/$(DEPDIR)/$(am__dirstamp)
+src/TextOutput.lo: src/$(am__dirstamp) src/$(DEPDIR)/$(am__dirstamp)
 
 libsharp.la: $(libsharp_la_OBJECTS) $(libsharp_la_DEPENDENCIES) $(EXTRA_libsharp_la_DEPENDENCIES) 
 	$(AM_V_CXXLD)$(libsharp_la_LINK) -rpath $(libdir) $(libsharp_la_OBJECTS) $(libsharp_la_LIBADD) $(LIBS)
@@ -727,6 +730,7 @@ distclean-compile:
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/NodeTupleSetMap.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/NodeTupleSetMapOverlay.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/NullTreeSolutionExtractor.Plo@am__quote@
+@AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/TextOutput.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/TupleSet.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/assembly.Plo@am__quote@
 @AMDEP_TRUE@@am__include@ @am__quote@src/$(DEPDIR)/create.Plo@am__quote@
@@ -1220,6 +1224,9 @@ uninstall-am: uninstall-libLTLIBRARIES \
 	tags tags-am uninstall uninstall-am uninstall-libLTLIBRARIES \
 	uninstall-libsharp_la_includeHEADERS
 
+	\
+	include/sharp/ISharpOutput.hpp \
+    include/sharp/TextOutput.hpp
 
 # Tell versions [3.59,3.63) of GNU make to not export all variables.
 # Otherwise a system limit (for SysV at least) may be exceeded.

@@ -276,7 +276,7 @@ namespace sharp
 		
 		td = decomposer_.computeDecomposition(*hg);
         TextOutput t = TextOutput();
-        t.decomposition(td);
+//        t.decomposition(td);
 
 		/*htd::PreOrderTreeTraversal traversal;
 		traversal.traverse(*td, [&](htd::vertex_t v, htd::vertex_t v2, size_t s){ std::cout << v << "[" << v2 << "]" << " @" << s << ": " << td->bagContent(v) << std::endl; });*/
