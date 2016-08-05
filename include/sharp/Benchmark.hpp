@@ -14,7 +14,8 @@ namespace sharp
 	public:
 		static void registerTimestamp(const std::string &name);
 		static void printBenchmarks(std::ostream &out, bool csv);
-		static void interrupt() { exit = true; }
+		static void printBenchmarksJSON(std::ostream &out, bool csv);
+	    static void interrupt() { exit = true; }
 		static bool isInterrupt() { return exit; }
 	private:
 		Benchmark();

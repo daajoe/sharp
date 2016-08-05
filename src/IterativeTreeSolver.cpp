@@ -8,6 +8,8 @@
 #include "NodeTableMap.hpp"
 
 #include <sharp/Benchmark.hpp>
+#include <sharp/TextOutput.hpp>
+
 #include <htd/JoinNodeReplacementOperation.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
 #include <htd/SemiNormalizationOperation.hpp>
@@ -266,14 +268,16 @@ namespace sharp
                     std::chrono::duration_cast<std::chrono::milliseconds>
                             (std::chrono::system_clock::now().time_since_epoch()).count();
 
-                std::cout << "c status " << optimalBagSize << " " << msSinceEpoch << std::endl;
+                std::cerr << "c status " << optimalBagSize << " " << msSinceEpoch << std::endl;
             }
         });
 		}	
 		else {
 		
 		td = decomposer_.computeDecomposition(*hg);
-	
+        TextOutput t = TextOutput();
+        t.decomposition(td);
+
 		/*htd::PreOrderTreeTraversal traversal;
 		traversal.traverse(*td, [&](htd::vertex_t v, htd::vertex_t v2, size_t s){ std::cout << v << "[" << v2 << "]" << " @" << s << ": " << td->bagContent(v) << std::endl; });*/
 
@@ -321,7 +325,7 @@ namespace sharp
 			std::string passDesc("PASS ");
 			passDesc += ('0' + pass);
 			Benchmark::registerTimestamp(passDesc.c_str());
-			std::cout << std::endl << passDesc <<  " finished " << std::endl;
+			std::cerr << std::endl << passDesc <<  " finished " << std::endl;
 			++pass;
 		}
 			/*else
