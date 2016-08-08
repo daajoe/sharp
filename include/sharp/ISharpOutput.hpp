@@ -21,29 +21,38 @@
  * You should have received a copy of the GNU General Public License
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
+#ifndef SHARP_SHARP_SHARPOUTPUT_H_
+#define SHARP_SHARP_SHARPOUTPUT_H_
+
+#include <sharp/global>
+#include <string>
+#include <gmpxx.h>
+
 
 #include <htd/TreeDecompositionFactory.hpp>
 
-//#include <dynasp/global>
-//#include <string>
-
 namespace sharp {
-    using htd::ITreeDecomposition;
 
-    class ISharpOutput {
+    class SHARP_API ISharpOutput {
     public:
-        virtual ~ISharpOutput() = 0;
+        virtual void decomposition(const std::string &key, htd::ITreeDecomposition *td) = 0;
 
-        virtual void decomposition(const std::string &key, ITreeDecomposition *td);
+        virtual void decomposition(htd::ITreeDecomposition *td) = 0;
 
-        virtual void decomposition(ITreeDecomposition &td);
+        virtual void key_value(const std::string &key, const mpz_class &value) = 0;
 
-        virtual void key_value(const std::string &key, const std::string &value);
+        virtual void key_value(const std::string &key, const std::size_t value) = 0;
 
-        virtual void comment(const std::string &value);
+        virtual void key_value(const std::string &key, const std::string &value)= 0;
 
+        virtual void info(const std::string &value)= 0;
+
+        virtual void debug(const std::string &value)= 0;
+
+        virtual void warning(const std::string &value)= 0;
+
+        virtual void error(const std::string &value)= 0;
     };
-
-    inline ISharpOutput::~ISharpOutput() {}
 }
 
+#endif

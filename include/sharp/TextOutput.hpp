@@ -23,23 +23,30 @@
  */
 
 #include <sharp/ISharpOutput.hpp>
-#include <htd/ITreeDecomposition.hpp>
+
+#include <string>
+
 
 namespace sharp {
-    class TextOutput : public virtual sharp::ISharpOutput {
+    class TextOutput : public virtual ISharpOutput {
     public:
-        TextOutput(void);
-
-        ~TextOutput();
-
         void decomposition(const std::string &key, htd::ITreeDecomposition *td);
 
-        void decomposition(htd::ITreeDecomposition &td);
+        void decomposition(htd::ITreeDecomposition *td);
+
+        void key_value(const std::string &key, const mpz_class &value);
+
+        void key_value(const std::string &key, const std::size_t value);
 
         void key_value(const std::string &key, const std::string &value);
 
-        void comment(const std::string &value);
+        void info(const std::string &value);
 
+        void debug(const std::string &value);
+
+        void warning(const std::string &value);
+
+        void error(const std::string &value);
     };
 }
 

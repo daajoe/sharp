@@ -42,7 +42,7 @@ namespace sharp
 		: IterativeTreeSolver(
 				decomposer,
 				convertAlgorithmList(algorithms),
-				true)
+				true, output_)
 	{ }
 
 	IterativeTreeTupleSolver::IterativeTreeTupleSolver(
@@ -69,7 +69,7 @@ namespace sharp
 				std::unique_ptr<const ITreeSolutionExtractor>(
 					new TupleToTreeSolutionExtractorAdapter(extractor)),
 				true,
-				true)
+				true, output_)
 	{ }
 
 	IterativeTreeTupleSolver::~IterativeTreeTupleSolver() { }

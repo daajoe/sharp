@@ -13,51 +13,41 @@ namespace sharp
 {
 	using htd::ITreeDecompositionAlgorithm;
 
-	ITreeSolver *create::treeSolver(
-			const ITreeDecompositionAlgorithm &decomposer,
-			const ITreeAlgorithm &algorithm)
+	ITreeSolver *create::treeSolver(const ITreeDecompositionAlgorithm &decomposer, const ITreeAlgorithm &algorithm,
+                                        const ISharpOutput &output)
 	{
-		return new IterativeTreeSolver(decomposer, algorithm);
+		return new IterativeTreeSolver(decomposer, algorithm, output);
 	}
 
-	ITreeSolver *create::treeSolver(
-			const ITreeDecompositionAlgorithm &decomposer,
-			const ITreeAlgorithm &algorithm1,
-			const ITreeAlgorithm &algorithm2)
+	ITreeSolver *create::treeSolver(const ITreeDecompositionAlgorithm &decomposer, const ITreeAlgorithm &algorithm1,
+                                        const ITreeAlgorithm &algorithm2, const ISharpOutput &output)
 	{
-		return new IterativeTreeSolver(decomposer, algorithm1, algorithm2);
+		return new IterativeTreeSolver(decomposer, algorithm1, algorithm2, output);
 	}
 
-	ITreeSolver *create::treeSolver(
-			const ITreeDecompositionAlgorithm &decomposer,
-			const TreeAlgorithmVector &algorithms)
+	ITreeSolver *create::treeSolver(const ITreeDecompositionAlgorithm &decomposer, const TreeAlgorithmVector &algorithms,
+                                        const ISharpOutput &output)
 	{
-		return new IterativeTreeSolver(decomposer, algorithms);
+		return new IterativeTreeSolver(decomposer, algorithms, output);
 	}
 
-	ITreeSolver *create::treeSolver(
-			const ITreeDecompositionAlgorithm &decomposer,
-			const ITreeAlgorithm &algorithm,
-			const ITreeSolutionExtractor &extractor)
+	ITreeSolver *create::treeSolver(const ITreeDecompositionAlgorithm &decomposer, const ITreeAlgorithm &algorithm,
+                                        const ITreeSolutionExtractor &extractor, const ISharpOutput &output)
 	{
-		return new IterativeTreeSolver(decomposer, algorithm, extractor);
+		return new IterativeTreeSolver(decomposer, algorithm, extractor, output);
 	}
 
-	ITreeSolver *create::treeSolver(
-			const ITreeDecompositionAlgorithm &decomposer,
-			const ITreeAlgorithm &alg1,
-			const ITreeAlgorithm &alg2,
-			const ITreeSolutionExtractor &extractor)
+	ITreeSolver *create::treeSolver(const ITreeDecompositionAlgorithm &decomposer, const ITreeAlgorithm &alg1,
+                                        const ITreeAlgorithm &alg2, const ITreeSolutionExtractor &extractor,
+                                        const ISharpOutput &output)
 	{
-		return new IterativeTreeSolver(decomposer, alg1, alg2, extractor);
+		return new IterativeTreeSolver(decomposer, alg1, alg2, extractor, output);
 	}
 
-	ITreeSolver *create::treeSolver(
-			const ITreeDecompositionAlgorithm &decomposer,
-			const TreeAlgorithmVector &algorithms,
-			const ITreeSolutionExtractor &extractor)
+	ITreeSolver *create::treeSolver(const ITreeDecompositionAlgorithm &decomposer, const TreeAlgorithmVector &algorithms,
+                                        const ITreeSolutionExtractor &extractor, const ISharpOutput &output)
 	{
-		return new IterativeTreeSolver(decomposer, algorithms, extractor);
+		return new IterativeTreeSolver(decomposer, algorithms, extractor, output);
 	}
 
 	ITreeSolver *create::treeSolver(

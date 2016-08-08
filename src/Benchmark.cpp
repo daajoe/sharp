@@ -9,9 +9,10 @@
 //FIXME: use config.h info here, build check into autoconf
 #include <sys/times.h>
 
-#ifdef HAVE_UNISTD_H //FIXME: what if not def'd?
-	#include <unistd.h>
-#endif
+//TODO:
+//#ifdef HAVE_UNISTD_H //FIXME: what if not def'd?
+#include <unistd.h>
+//#endif
 
 namespace sharp
 {

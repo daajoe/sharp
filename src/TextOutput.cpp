@@ -22,28 +22,55 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include <sharp/TextOutput.hpp>
+#include "sharp/TextOutput.hpp"
+
+#include <iostream>
+#include <sstream>
+
+#include <htd/PreOrderTreeTraversal.hpp>
 
 namespace sharp {
-    TextOutput::TextOutput(void){
-
-    }
-
-    TextOutput::~TextOutput(){
-
-    }
-
-
     void TextOutput::decomposition(const std::string &key, htd::ITreeDecomposition *td) {
+        std::cout << key << std::endl;
+        this->decomposition(td);
     }
 
-    void TextOutput::decomposition(htd::ITreeDecomposition &td) {
+    void TextOutput::decomposition(htd::ITreeDecomposition *td) {
+        htd::PreOrderTreeTraversal traversal;
+
+        traversal.traverse(*td, [&](htd::vertex_t v, htd::vertex_t v2, size_t s) {
+            std::cout << v << "[" << v2 << "]" << " @" << s << ": " << td->bagContent(v) << std::endl;
+        });
+    }
+
+    void TextOutput::key_value(const std::string &key, const mpz_class &value) {
+//        std::ostringstream str;
+//        str << value;
+        this->key_value(key, value.get_str());
+    }
+
+    void TextOutput::key_value(const std::string &key, const std::size_t value) {
+        this->key_value(key, std::to_string(value));
     }
 
     void TextOutput::key_value(const std::string &key, const std::string &value) {
+        std::cout << key << " : " << value << std::endl;
     }
 
-    void TextOutput::comment(const std::string &value) {
+    void TextOutput::info(const std::string &value) {
+        std::cout << "# " << value << std::endl;
+    }
+
+    void TextOutput::debug(const std::string &value) {
+        std::cout << "# " << value << std::endl;
+    }
+
+    void TextOutput::warning(const std::string &value) {
+        std::cout << "# " << value << std::endl;
+    }
+
+    void TextOutput::error(const std::string &value) {
+        std::cout << "# " << value << std::endl;
     }
 }
 
