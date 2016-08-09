@@ -3,7 +3,6 @@
 
 #include <sharp/global>
 
-#include <sharp/ISharpOutput.hpp>
 #include <sharp/ITreeSolver.hpp>
 #include <sharp/ITreeAlgorithm.hpp>
 #include <sharp/ITreeTupleAlgorithm.hpp>
@@ -12,81 +11,82 @@
 
 #include <htd/main.hpp>
 
-namespace sharp {
+namespace sharp
+{
 
-    class SHARP_API create {
-    public:
-        static ITreeSolver *treeSolver(
-                const htd::ITreeDecompositionAlgorithm &decomposer,
-                const ITreeAlgorithm &algorithm,
-                const ISharpOutput &output);
+	class SHARP_API create
+	{
+	public:
+		static ITreeSolver *treeSolver(
+				const htd::ITreeDecompositionAlgorithm &decomposer,
+				const ITreeAlgorithm &algorithm);
 
-        static ITreeSolver *treeSolver(
-                const htd::ITreeDecompositionAlgorithm &decomposer,
-                const ITreeAlgorithm &algorithm1,
-                const ITreeAlgorithm &algorithm2, const ISharpOutput &output);
+		static ITreeSolver *treeSolver(
+				const htd::ITreeDecompositionAlgorithm &decomposer,
+				const ITreeAlgorithm &algorithm1,
+				const ITreeAlgorithm &algorithm2);
 
-        static ITreeSolver *treeSolver(
-                const htd::ITreeDecompositionAlgorithm &decomposer,
-                const TreeAlgorithmVector &algorithms, const ISharpOutput &output);
+		static ITreeSolver *treeSolver(
+				const htd::ITreeDecompositionAlgorithm &decomposer,
+				const TreeAlgorithmVector &algorithms);
 
-        static ITreeSolver *treeSolver(
-                const htd::ITreeDecompositionAlgorithm &decomposer,
-                const ITreeAlgorithm &algorithm,
-                const ITreeSolutionExtractor &extractor, const ISharpOutput &output);
+		static ITreeSolver *treeSolver(
+				const htd::ITreeDecompositionAlgorithm &decomposer,
+				const ITreeAlgorithm &algorithm,
+				const ITreeSolutionExtractor &extractor);
 
-        static ITreeSolver *treeSolver(
-                const htd::ITreeDecompositionAlgorithm &decomposer,
-                const ITreeAlgorithm &algorithm1,
-                const ITreeAlgorithm &algorithm2,
-                const ITreeSolutionExtractor &extractor, const ISharpOutput &output);
+		static ITreeSolver *treeSolver(
+				const htd::ITreeDecompositionAlgorithm &decomposer,
+				const ITreeAlgorithm &algorithm1,
+				const ITreeAlgorithm &algorithm2,
+				const ITreeSolutionExtractor &extractor);
 
-        static ITreeSolver *treeSolver(
-                const htd::ITreeDecompositionAlgorithm &decomposer,
-                const TreeAlgorithmVector &algorithms,
-                const ITreeSolutionExtractor &extractor, const ISharpOutput &output);
+		static ITreeSolver *treeSolver(
+				const htd::ITreeDecompositionAlgorithm &decomposer,
+				const TreeAlgorithmVector &algorithms,
+				const ITreeSolutionExtractor &extractor);
 
-        static ITreeSolver *treeSolver(
-                const htd::ITreeDecompositionAlgorithm &decomposer,
-                const ITreeTupleAlgorithm &algorithm);
+		static ITreeSolver *treeSolver(
+				const htd::ITreeDecompositionAlgorithm &decomposer,
+				const ITreeTupleAlgorithm &algorithm);
 
-        static ITreeSolver *treeSolver(
-                const htd::ITreeDecompositionAlgorithm &decomposer,
-                const ITreeTupleAlgorithm &algorithm1,
-                const ITreeTupleAlgorithm &algorithm2);
+		static ITreeSolver *treeSolver(
+				const htd::ITreeDecompositionAlgorithm &decomposer,
+				const ITreeTupleAlgorithm &algorithm1,
+				const ITreeTupleAlgorithm &algorithm2);
 
-        static ITreeSolver *treeSolver(
-                const htd::ITreeDecompositionAlgorithm &decomposer,
-                const TreeTupleAlgorithmVector &algorithms);
+		static ITreeSolver *treeSolver(
+				const htd::ITreeDecompositionAlgorithm &decomposer,
+				const TreeTupleAlgorithmVector &algorithms);
 
-        static ITreeSolver *treeSolver(
-                const htd::ITreeDecompositionAlgorithm &decomposer,
-                const ITreeTupleAlgorithm &algorithm,
-                const ITreeTupleSolutionExtractor &extractor);
+		static ITreeSolver *treeSolver(
+				const htd::ITreeDecompositionAlgorithm &decomposer,
+				const ITreeTupleAlgorithm &algorithm,
+				const ITreeTupleSolutionExtractor &extractor);
 
-        static ITreeSolver *treeSolver(
-                const htd::ITreeDecompositionAlgorithm &decomposer,
-                const ITreeTupleAlgorithm &algorithm1,
-                const ITreeTupleAlgorithm &algorithm2,
-                const ITreeTupleSolutionExtractor &extractor);
+		static ITreeSolver *treeSolver(
+				const htd::ITreeDecompositionAlgorithm &decomposer,
+				const ITreeTupleAlgorithm &algorithm1,
+				const ITreeTupleAlgorithm &algorithm2,
+				const ITreeTupleSolutionExtractor &extractor);
 
-        static ITreeSolver *treeSolver(
-                const htd::ITreeDecompositionAlgorithm &decomposer,
-                const TreeTupleAlgorithmVector &algorithms,
-                const ITreeTupleSolutionExtractor &extractor);
+		static ITreeSolver *treeSolver(
+				const htd::ITreeDecompositionAlgorithm &decomposer,
+				const TreeTupleAlgorithmVector &algorithms,
+				const ITreeTupleSolutionExtractor &extractor);
 
-        static ITreeAlgorithm *treeAlgorithm(
-                const ITreeAlgorithm &algorithm1,
-                const ITreeAlgorithm &algorithm2);
+		static ITreeAlgorithm *treeAlgorithm(
+				const ITreeAlgorithm &algorithm1,
+				const ITreeAlgorithm &algorithm2);
 
-        static ITreeTupleAlgorithm *treeTupleAlgorithm(
-                const ITreeTupleAlgorithm &algorithm1,
-                const ITreeTupleAlgorithm &algorithm2);
+		static ITreeTupleAlgorithm *treeTupleAlgorithm(
+				const ITreeTupleAlgorithm &algorithm1,
+				const ITreeTupleAlgorithm &algorithm2);
 
-    private:
-        create();
+	private:
+		create();
 
-    }; // class create
+	}; // class create
 
 } // namespace sharp
 

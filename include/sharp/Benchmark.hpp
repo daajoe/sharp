@@ -6,6 +6,7 @@
 #include <iostream>
 #include <string>
 #include <mutex>
+#include <sharp/ISharpOutput.hpp>
 
 namespace sharp
 {
@@ -14,14 +15,25 @@ namespace sharp
 	public:
 		static void registerTimestamp(const std::string &name);
 		static void printBenchmarks(std::ostream &out, bool csv);
-		static void printBenchmarksJSON(std::ostream &out, bool csv);
 	    static void interrupt() { exit = true; }
-		static bool isInterrupt() { return exit; }
+	    static bool isInterrupt() { return exit; }
+//        static void registerOutput(ISharpOutput *output) { output_ = output;};
+//        static ISharpOutput *output(){ return output_;};
+
+//        static void registerOutput(bool value) { output = value;};
+        static void registerOutput(std::shared_ptr<ISharpOutput> output) { output_ = output;};
+        static std::shared_ptr<ISharpOutput> output();
+        //{ return output_;};
+
 	private:
 		Benchmark();
 		static bool exit;
-		static std::mutex lock;
-	};
+//        static bool output;
+        static std::mutex lock;
+//        static ISharpOutput *output_;
+        static std::shared_ptr<ISharpOutput> output_;
+
+    };
 
 } // namespace sharp
 

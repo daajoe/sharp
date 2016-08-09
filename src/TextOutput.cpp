@@ -30,12 +30,28 @@
 #include <htd/PreOrderTreeTraversal.hpp>
 
 namespace sharp {
-    void TextOutput::decomposition(const std::string &key, htd::ITreeDecomposition *td) {
+    void TextOutput::data(const std::string &key, htd::ITreeDecomposition *td) {
         std::cout << key << std::endl;
-        this->decomposition(td);
+        info(td);
     }
 
-    void TextOutput::decomposition(htd::ITreeDecomposition *td) {
+    void TextOutput::data(const std::string &key, const mpz_class &value) {
+        this->data(key, value.get_str());
+    }
+
+    void TextOutput::data(const std::string &key, const std::size_t value) {
+        this->data(key, std::to_string(value));
+    }
+
+    void TextOutput::data(const std::string &key, const std::string &value) {
+        std::cout << key << " : " << value << std::endl;
+    }
+
+    void TextOutput::info(const std::string &value) {
+        std::cout << "# " << value << std::endl;
+    }
+
+    void TextOutput::info(htd::ITreeDecomposition *td) {
         htd::PreOrderTreeTraversal traversal;
 
         traversal.traverse(*td, [&](htd::vertex_t v, htd::vertex_t v2, size_t s) {
@@ -43,22 +59,16 @@ namespace sharp {
         });
     }
 
-    void TextOutput::key_value(const std::string &key, const mpz_class &value) {
-//        std::ostringstream str;
-//        str << value;
-        this->key_value(key, value.get_str());
+    void TextOutput::info(const std::string &key, const std::size_t value) {
+        data(key,value);
     }
 
-    void TextOutput::key_value(const std::string &key, const std::size_t value) {
-        this->key_value(key, std::to_string(value));
+    void TextOutput::info(const std::string &key, const std::string &value) {
+        data(key,value);
     }
 
-    void TextOutput::key_value(const std::string &key, const std::string &value) {
-        std::cout << key << " : " << value << std::endl;
-    }
-
-    void TextOutput::info(const std::string &value) {
-        std::cout << "# " << value << std::endl;
+    void TextOutput::debug(const std::string &value, htd::ITreeDecomposition *td) {
+        data(value, td);
     }
 
     void TextOutput::debug(const std::string &value) {
@@ -72,6 +82,7 @@ namespace sharp {
     void TextOutput::error(const std::string &value) {
         std::cout << "# " << value << std::endl;
     }
+
 }
 
 

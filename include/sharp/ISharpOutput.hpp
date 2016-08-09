@@ -35,17 +35,23 @@ namespace sharp {
 
     class SHARP_API ISharpOutput {
     public:
-        virtual void decomposition(const std::string &key, htd::ITreeDecomposition *td) = 0;
+        virtual void data(const std::string &key, htd::ITreeDecomposition *td) = 0;
 
-        virtual void decomposition(htd::ITreeDecomposition *td) = 0;
+        virtual void data(const std::string &key, const mpz_class &value) = 0;
 
-        virtual void key_value(const std::string &key, const mpz_class &value) = 0;
+        virtual void data(const std::string &key, const std::size_t value) = 0;
 
-        virtual void key_value(const std::string &key, const std::size_t value) = 0;
-
-        virtual void key_value(const std::string &key, const std::string &value)= 0;
+        virtual void data(const std::string &key, const std::string &value)= 0;
 
         virtual void info(const std::string &value)= 0;
+
+        virtual void info(htd::ITreeDecomposition *td) = 0;
+
+        virtual void info(const std::string &key, const std::size_t value) = 0;
+
+        virtual void info(const std::string &key, const std::string &value)= 0;
+
+        virtual void debug(const std::string &value, htd::ITreeDecomposition *td) = 0;
 
         virtual void debug(const std::string &value)= 0;
 

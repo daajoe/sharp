@@ -8,7 +8,7 @@
 #include "NodeTableMap.hpp"
 
 #include <sharp/Benchmark.hpp>
-#include "sharp/TextOutput.hpp"
+#include <sharp/TextOutput.hpp>
 
 #include <htd/JoinNodeReplacementOperation.hpp>
 #include <htd/TreeDecompositionFactory.hpp>
@@ -42,27 +42,24 @@ namespace sharp {
     IterativeTreeSolver::IterativeTreeSolver(
             const htd::ITreeDecompositionAlgorithm &decomposer,
             std::vector<std::unique_ptr<const ITreeAlgorithm> > &&algorithms,
-            bool deleteAlgorithms, const ISharpOutput &output)
+            bool deleteAlgorithms)
             : IterativeTreeSolver(decomposer,
                                   std::move(algorithms),
                                   std::unique_ptr<const ITreeSolutionExtractor>(
                                           new NullTreeSolutionExtractor()),
                                   deleteAlgorithms,
-                                  true, output) {}
+                                  true) {}
 
     IterativeTreeSolver::IterativeTreeSolver(
             const htd::ITreeDecompositionAlgorithm &decomposer,
             std::vector<std::unique_ptr<const ITreeAlgorithm> > &&algorithms,
             std::unique_ptr<const ITreeSolutionExtractor> extractor,
             bool deleteAlgorithms,
-            bool deleteExtractor,
-            const ISharpOutput &output
-    )
+            bool deleteExtractor)
             : decomposer_(decomposer),
               extractor_(extractor.get()),
               manageAlgorithmMemory_(deleteAlgorithms),
-              manageExtractorMemory_(deleteExtractor),
-              output_(output) {
+              manageExtractorMemory_(deleteExtractor) {
         for (std::unique_ptr<const ITreeAlgorithm> &alg : algorithms)
             algorithms_.push_back(alg.get());
 
@@ -71,46 +68,48 @@ namespace sharp {
         extractor.release();
     }
 
-    IterativeTreeSolver::IterativeTreeSolver(const htd::ITreeDecompositionAlgorithm &decomposer,
-                                             const ITreeAlgorithm &algorithm,
-                                             const ISharpOutput &output)
-            : IterativeTreeSolver(decomposer, {&algorithm}, output) {}
+    IterativeTreeSolver::IterativeTreeSolver(
+            const htd::ITreeDecompositionAlgorithm &decomposer,
+            const ITreeAlgorithm &algorithm)
+            : IterativeTreeSolver(decomposer, {&algorithm}) {}
 
-    IterativeTreeSolver::IterativeTreeSolver(const htd::ITreeDecompositionAlgorithm &decomposer,
-                                             const ITreeAlgorithm &algorithm1,
-                                             const ITreeAlgorithm &algorithm2, const ISharpOutput &output)
-            : IterativeTreeSolver(decomposer, {&algorithm1, &algorithm2}, output) {}
+    IterativeTreeSolver::IterativeTreeSolver(
+            const htd::ITreeDecompositionAlgorithm &decomposer,
+            const ITreeAlgorithm &algorithm1,
+            const ITreeAlgorithm &algorithm2)
+            : IterativeTreeSolver(decomposer, {&algorithm1, &algorithm2}) {}
 
-    IterativeTreeSolver::IterativeTreeSolver(const htd::ITreeDecompositionAlgorithm &decomposer,
-                                             const TreeAlgorithmVector &algorithms,
-                                             const ISharpOutput &output)
+    IterativeTreeSolver::IterativeTreeSolver(
+            const htd::ITreeDecompositionAlgorithm &decomposer,
+            const TreeAlgorithmVector &algorithms)
             : decomposer_(decomposer),
               algorithms_(algorithms),
               extractor_(new NullTreeSolutionExtractor()),
               manageAlgorithmMemory_(false),
-              manageExtractorMemory_(true),
-              output_(output) {}
+              manageExtractorMemory_(true) {}
 
-    IterativeTreeSolver::IterativeTreeSolver(const htd::ITreeDecompositionAlgorithm &decomposer,
-                                             const ITreeAlgorithm &algorithm,
-                                             const ITreeSolutionExtractor &extractor, const ISharpOutput &output)
-            : IterativeTreeSolver(decomposer, {&algorithm}, extractor, output) {}
+    IterativeTreeSolver::IterativeTreeSolver(
+            const htd::ITreeDecompositionAlgorithm &decomposer,
+            const ITreeAlgorithm &algorithm,
+            const ITreeSolutionExtractor &extractor)
+            : IterativeTreeSolver(decomposer, {&algorithm}, extractor) {}
 
-    IterativeTreeSolver::IterativeTreeSolver(const htd::ITreeDecompositionAlgorithm &decomposer,
-                                             const ITreeAlgorithm &alg1,
-                                             const ITreeAlgorithm &alg2, const ITreeSolutionExtractor &extractor,
-                                             const ISharpOutput &output)
-            : IterativeTreeSolver(decomposer, {&alg1, &alg2}, extractor, output) {}
+    IterativeTreeSolver::IterativeTreeSolver(
+            const htd::ITreeDecompositionAlgorithm &decomposer,
+            const ITreeAlgorithm &alg1,
+            const ITreeAlgorithm &alg2,
+            const ITreeSolutionExtractor &extractor)
+            : IterativeTreeSolver(decomposer, {&alg1, &alg2}, extractor) {}
 
-    IterativeTreeSolver::IterativeTreeSolver(const htd::ITreeDecompositionAlgorithm &decomposer,
-                                             const TreeAlgorithmVector &algorithms,
-                                             const ITreeSolutionExtractor &extractor, const ISharpOutput &output)
+    IterativeTreeSolver::IterativeTreeSolver(
+            const htd::ITreeDecompositionAlgorithm &decomposer,
+            const TreeAlgorithmVector &algorithms,
+            const ITreeSolutionExtractor &extractor)
             : decomposer_(decomposer),
               algorithms_(algorithms),
               extractor_(&extractor),
               manageAlgorithmMemory_(false),
-              manageExtractorMemory_(false),
-              output_(output) {}
+              manageExtractorMemory_(false) {}
 
 
     IterativeTreeSolver::~IterativeTreeSolver() {
@@ -261,11 +260,7 @@ namespace sharp {
         else {
 
             td = decomposer_.computeDecomposition(*hg);
-            TextOutput output = TextOutput();
-            output.decomposition("before normalization", td);
-
-            /*htd::PreOrderTreeTraversal traversal;
-            traversal.traverse(*td, [&](htd::vertex_t v, htd::vertex_t v2, size_t s){ std::cout << v << "[" << v2 << "]" << " @" << s << ": " << td->bagContent(v) << std::endl; });*/
+            Benchmark::output()->debug("before normalization", td);
 
             //TODO: remove joinnodereplacementoperation
             //htd::JoinNodeReplacementOperation j;
@@ -282,8 +277,11 @@ namespace sharp {
 
             htd::TreeDecompositionVerifier v;
             assert(v.verify(*hg, *td));
-            output.decomposition("after normalization", td);
+//            const ISharpOutput *out_ = Benchmark::output();
+            Benchmark::output()->debug("after normalization", td);
         }
+        Benchmark::output()->info(td);
+
         Benchmark::registerTimestamp("tree decomposition time");
         assert(td->maximumBagSize() <= 15);
         //assert(td->maximumBagSize() - 1 <= 15);
@@ -307,7 +305,7 @@ namespace sharp {
             std::string passDesc("PASS ");
             passDesc += ('0' + pass);
             Benchmark::registerTimestamp(passDesc.c_str());
-            std::cerr << std::endl << passDesc << " finished " << std::endl;
+            Benchmark::output()->info(passDesc, "finished");
             ++pass;
         }
         /*else
