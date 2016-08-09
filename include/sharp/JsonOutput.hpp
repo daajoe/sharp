@@ -1,5 +1,5 @@
-/*
- * File:   TextOutput.hpp
+/* 
+ * File:   JsonOutput.hpp
  *
  * Author: FICHTE Johannes (fichte@dbai.tuwien.ac.at)
  * 
@@ -28,7 +28,7 @@
 
 
 namespace sharp {
-    class TextOutput : public virtual ISharpOutput {
+    class JsonOutput : public virtual ISharpOutput {
     public:
         void data(const std::string &key, htd::ITreeDecomposition *td);
 
@@ -55,6 +55,14 @@ namespace sharp {
         void warning(const std::string &value);
 
         void error(const std::string &value);
+
+        ~JsonOutput(void);
+
+    private:
+        static std::map <std::string, std::map<std::string, std::string>> output;
+        static const std::string EMPTY;
+
+        const std::string to_string(htd::ITreeDecomposition *td);
     };
 }
 

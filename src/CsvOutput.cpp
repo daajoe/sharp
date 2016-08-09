@@ -1,5 +1,5 @@
 /*
- * File:   TextOutput.cpp
+ * File:   CsvOutput.cpp
  *
  * Author: FICHTE Johannes (fichte@dbai.tuwien.ac.at)
  *
@@ -22,7 +22,7 @@
  * along with htd.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-#include "sharp/TextOutput.hpp"
+#include "sharp/CsvOutput.hpp"
 
 #include <iostream>
 #include <sstream>
@@ -30,33 +30,33 @@
 #include <htd/PreOrderTreeTraversal.hpp>
 
 namespace sharp {
-    void TextOutput::data(const std::string &key, htd::ITreeDecomposition *td) {
+    void CsvOutput::data(const std::string &key, htd::ITreeDecomposition *td) {
         std::cout << key << std::endl;
         info(td);
     }
 
-    void TextOutput::data(const std::string &key, const mpz_class &value) {
+    void CsvOutput::data(const std::string &key, const mpz_class &value) {
         this->data(key, value.get_str());
     }
 
-    void TextOutput::data(const std::string &key, const std::size_t value) {
+    void CsvOutput::data(const std::string &key, const std::size_t value) {
         this->data(key, std::to_string(value));
     }
 
-    void TextOutput::data(const std::string &key, const std::string &value) {
+    void CsvOutput::data(const std::string &key, const std::string &value) {
         std::cout << key << " : " << value << std::endl;
     }
 
-    void TextOutput::info(const std::string &value) {
+    void CsvOutput::info(const std::string &value) {
         std::cout << "# " << value << std::endl;
     }
 
-    void TextOutput::data(const std::string &group, const std::string &key, const std::size_t value) {
+    void CsvOutput::data(const std::string &group, const std::string &key, const std::size_t value) {
         std::cout << group << " ";
         this->data(key, std::to_string(value));
     }
 
-        void TextOutput::info(htd::ITreeDecomposition *td) {
+        void CsvOutput::info(htd::ITreeDecomposition *td) {
         htd::PreOrderTreeTraversal traversal;
 
         traversal.traverse(*td, [&](htd::vertex_t v, htd::vertex_t v2, size_t s) {
@@ -64,27 +64,27 @@ namespace sharp {
         });
     }
 
-    void TextOutput::info(const std::string &key, const std::size_t value) {
+    void CsvOutput::info(const std::string &key, const std::size_t value) {
         data(key,value);
     }
 
-    void TextOutput::info(const std::string &key, const std::string &value) {
+    void CsvOutput::info(const std::string &key, const std::string &value) {
         data(key,value);
     }
 
-    void TextOutput::debug(const std::string &value, htd::ITreeDecomposition *td) {
+    void CsvOutput::debug(const std::string &value, htd::ITreeDecomposition *td) {
         data(value, td);
     }
 
-    void TextOutput::debug(const std::string &value) {
+    void CsvOutput::debug(const std::string &value) {
         std::cout << "# " << value << std::endl;
     }
 
-    void TextOutput::warning(const std::string &value) {
+    void CsvOutput::warning(const std::string &value) {
         std::cout << "# " << value << std::endl;
     }
 
-    void TextOutput::error(const std::string &value) {
+    void CsvOutput::error(const std::string &value) {
         std::cout << "# " << value << std::endl;
     }
 

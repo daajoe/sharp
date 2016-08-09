@@ -1,5 +1,5 @@
-/*
- * File:   TextOutput.hpp
+/* 
+ * File:   CsvOutput.hpp
  *
  * Author: FICHTE Johannes (fichte@dbai.tuwien.ac.at)
  * 
@@ -28,7 +28,7 @@
 
 
 namespace sharp {
-    class TextOutput : public virtual ISharpOutput {
+    class CsvOutput : public virtual ISharpOutput {
     public:
         void data(const std::string &key, htd::ITreeDecomposition *td);
 
