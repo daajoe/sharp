@@ -253,7 +253,8 @@ namespace sharp {
                                     std::chrono::duration_cast<std::chrono::milliseconds>
                                             (std::chrono::system_clock::now().time_since_epoch()).count();
 
-                            std::cerr << "c status " << optimalBagSize << " " << msSinceEpoch << std::endl;
+                            Benchmark::output()->debug("status", "optimalBagSize", optimalBagSize);
+                            Benchmark::output()->debug("status", "msSinceEpoch", msSinceEpoch);
                         }
                     });
         }

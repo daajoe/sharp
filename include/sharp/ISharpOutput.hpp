@@ -41,6 +41,8 @@ namespace sharp {
 
         virtual void data(const std::string &key, const std::size_t value) = 0;
 
+        virtual void data(const std::string &group, const std::string &key, double value) = 0;
+
         virtual void data(const std::string &group, const std::string &key, const std::size_t value) = 0;
 
         virtual void data(const std::string &key, const std::string &value)= 0;
@@ -53,13 +55,19 @@ namespace sharp {
 
         virtual void info(const std::string &key, const std::string &value)= 0;
 
+        virtual void debug(const std::string &value)= 0;
+
+        virtual void debug(const std::string &key, const std::size_t value) = 0;
+
         virtual void debug(const std::string &value, htd::ITreeDecomposition *td) = 0;
 
-        virtual void debug(const std::string &value)= 0;
+        virtual void debug(const std::string &group, const std::string &key, const std::size_t value) = 0;
 
         virtual void warning(const std::string &value)= 0;
 
         virtual void error(const std::string &value)= 0;
+
+        virtual void exit(void){ std::cout<<"foobar"<<std::endl;};
     };
 }
 

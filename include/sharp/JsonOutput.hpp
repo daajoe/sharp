@@ -34,9 +34,13 @@ namespace sharp {
 
         void data(const std::string &key, const mpz_class &value);
 
+        void data(const std::string &key, double value);
+
         void data(const std::string &key, const std::size_t value);
 
         void data(const std::string &key, const std::string &value);
+
+        void data(const std::string &group, const std::string &key, double value);
 
         void data(const std::string &group, const std::string &key, const std::size_t value);
 
@@ -48,15 +52,19 @@ namespace sharp {
 
         void info(const std::string &key, const std::string &value);
 
+        void debug(const std::string &value);
+
+        void debug(const std::string &key, const std::size_t value);
+
         void debug(const std::string &value, htd::ITreeDecomposition *td);
 
-        void debug(const std::string &value);
+        void debug(const std::string &group, const std::string &key, const std::size_t value);
 
         void warning(const std::string &value);
 
         void error(const std::string &value);
 
-        ~JsonOutput(void);
+        void exit(void);
 
     private:
         static std::map <std::string, std::map<std::string, std::string>> output;

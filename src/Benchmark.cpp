@@ -74,7 +74,7 @@ namespace sharp {
             << "0.00,0.00,0.00,0.00,"
             << names_.back() << endl;
 
-        output()->error(out.str());
+        output()->debug(out.str());
 
         clock_t lastWall = wallClock_.back();
         struct tms lastCpu = cpuClock_.back();

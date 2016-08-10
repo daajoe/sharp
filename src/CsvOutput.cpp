@@ -51,12 +51,17 @@ namespace sharp {
         std::cout << "# " << value << std::endl;
     }
 
+    void CsvOutput::data(const std::string &group, const std::string &key, double value) {
+        std::cout << group << " ";
+        this->data(key, std::to_string(value));
+    }
+
     void CsvOutput::data(const std::string &group, const std::string &key, const std::size_t value) {
         std::cout << group << " ";
         this->data(key, std::to_string(value));
     }
 
-        void CsvOutput::info(htd::ITreeDecomposition *td) {
+    void CsvOutput::info(htd::ITreeDecomposition *td) {
         htd::PreOrderTreeTraversal traversal;
 
         traversal.traverse(*td, [&](htd::vertex_t v, htd::vertex_t v2, size_t s) {
@@ -65,19 +70,27 @@ namespace sharp {
     }
 
     void CsvOutput::info(const std::string &key, const std::size_t value) {
-        data(key,value);
+        data(key, value);
     }
 
     void CsvOutput::info(const std::string &key, const std::string &value) {
-        data(key,value);
+        data(key, value);
+    }
+
+    void CsvOutput::debug(const std::string &value) {
+        std::cout << "# " << value << std::endl;
+    }
+
+    void CsvOutput::debug(const std::string &key, const std::size_t value) {
+        data(key, value);
     }
 
     void CsvOutput::debug(const std::string &value, htd::ITreeDecomposition *td) {
         data(value, td);
     }
 
-    void CsvOutput::debug(const std::string &value) {
-        std::cout << "# " << value << std::endl;
+    void CsvOutput::debug(const std::string &group, const std::string &key, const std::size_t value) {
+        data(group, key, value);
     }
 
     void CsvOutput::warning(const std::string &value) {

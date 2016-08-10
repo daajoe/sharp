@@ -38,6 +38,8 @@ namespace sharp {
 
         void data(const std::string &key, const std::string &value);
 
+        void data(const std::string &group, const std::string &key, double value);
+
         void data(const std::string &group, const std::string &key, const std::size_t value);
 
         void info(const std::string &value);
@@ -48,9 +50,13 @@ namespace sharp {
 
         void info(const std::string &key, const std::string &value);
 
+        void debug(const std::string &value);
+
+        void debug(const std::string &key, const std::size_t value);
+
         void debug(const std::string &value, htd::ITreeDecomposition *td);
 
-        void debug(const std::string &value);
+        void debug(const std::string &group, const std::string &key, const std::size_t value);
 
         void warning(const std::string &value);
 
