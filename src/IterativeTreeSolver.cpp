@@ -281,7 +281,10 @@ namespace sharp {
 //            const ISharpOutput *out_ = Benchmark::output();
             Benchmark::output()->debug("after normalization", td);
         }
-        Benchmark::output()->info(td);
+
+        Benchmark::output()->data("Dynamic-1","decomposition", td);
+
+//        Benchmark::output()->info(td);
 
         Benchmark::registerTimestamp("tree decomposition time");
         assert(td->maximumBagSize() <= 15);
@@ -306,7 +309,7 @@ namespace sharp {
             std::string passDesc("PASS ");
             passDesc += ('0' + pass);
             Benchmark::registerTimestamp(passDesc.c_str());
-            Benchmark::output()->info(passDesc, "finished");
+            Benchmark::output()->debug(passDesc, "finished");
             ++pass;
         }
         /*else

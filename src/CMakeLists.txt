@@ -1,6 +1,10 @@
 include_directories(${PROJECT_SOURCE_DIR}/include)
 aux_source_directory(. SRC_LIST)
 
+list(APPEND CMAKE_MODULE_PATH "${CMAKE_CURRENT_LIST_DIR}/../cmake")
+
+find_package(GMP REQUIRED)
+
 #TODO:
 #ExternalProject_Add(htd
 #        URL ...htd
@@ -36,6 +40,7 @@ set(SHARP_SOVERSION ${SHARP_SOVERSION_INTERFACE}.${SHARP_SOVERSION_REVISION}.${S
 file(GLOB_RECURSE HEADER_LIST ${PROJECT_SOURCE_DIR}/include/*.hpp)
 
 add_library(sharp ${SRC_LIST} ${HEADER_LIST})
+target_link_libraries(sharp gmp)
 
 set_property(TARGET sharp PROPERTY CXX_STANDARD 11)
 set_property(TARGET sharp PROPERTY CXX_STANDARD_REQUIRED ON)

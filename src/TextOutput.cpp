@@ -51,6 +51,11 @@ namespace sharp {
         std::cout << "# " << value << std::endl;
     }
 
+    void TextOutput::data(const std::string &group, const std::string &key, htd::ITreeDecomposition *td) {
+        std::cout << group << " ";
+        this->data(key, td);
+    }
+
     void TextOutput::data(const std::string &group, const std::string &key, double value) {
         std::cout << group << " ";
         this->data(key, std::to_string(value));
@@ -58,6 +63,15 @@ namespace sharp {
 
     void TextOutput::data(const std::string &group, const std::string &key, const std::size_t value) {
         std::cout << group << " ";
+        this->data(key, std::to_string(value));
+    }
+
+    void TextOutput::preproc_data(const std::string &key, htd::ITreeDecomposition *td) {
+        std::cout << key << std::endl;
+        info(td);
+    }
+
+    void TextOutput::preproc_data(const std::string &key, const std::size_t value) {
         this->data(key, std::to_string(value));
     }
 
@@ -83,6 +97,10 @@ namespace sharp {
 
     void TextOutput::debug(const std::string &key, const std::size_t value) {
         data(key, value);
+    }
+
+    void TextOutput::debug(const std::string &key, const std::string &value) {
+        std::cout << "# " << key << ":" << value << std::endl;
     }
 
     void TextOutput::debug(const std::string &value, htd::ITreeDecomposition *td) {

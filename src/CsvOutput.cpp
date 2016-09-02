@@ -51,6 +51,11 @@ namespace sharp {
         std::cout << "# " << value << std::endl;
     }
 
+    void CsvOutput::data(const std::string &group, const std::string &key, htd::ITreeDecomposition *td) {
+        std::cout << group << " ";
+        this->data(key,td);
+    }
+
     void CsvOutput::data(const std::string &group, const std::string &key, double value) {
         std::cout << group << " ";
         this->data(key, std::to_string(value));
@@ -58,6 +63,15 @@ namespace sharp {
 
     void CsvOutput::data(const std::string &group, const std::string &key, const std::size_t value) {
         std::cout << group << " ";
+        this->data(key, std::to_string(value));
+    }
+
+    void CsvOutput::preproc_data(const std::string &key, htd::ITreeDecomposition *td) {
+        std::cout << key << std::endl;
+        info(td);
+    }
+
+    void CsvOutput::preproc_data(const std::string &key, const std::size_t value) {
         this->data(key, std::to_string(value));
     }
 
@@ -82,7 +96,11 @@ namespace sharp {
     }
 
     void CsvOutput::debug(const std::string &key, const std::size_t value) {
-        data(key, value);
+        std::cout << "# " << key<< ":" << value << std::endl;
+    }
+
+    void CsvOutput::debug(const std::string &key, const std::string &value) {
+        std::cout << "# " << key<< ":" << value << std::endl;
     }
 
     void CsvOutput::debug(const std::string &value, htd::ITreeDecomposition *td) {
