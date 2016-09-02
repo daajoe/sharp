@@ -33,110 +33,52 @@
 
 
 namespace sharp {
-//    typedef std::map<std::string, std::map<std::string, std::string>> mapping;
-//    static std::map<std::string, std::map<std::string, map_values>> output;
-
-    multimap JsonOutput::output;
-
-    std::map<std::string, std::map<std::string, std::string>> JsonOutput::output_str;
-    std::map<std::string, std::map<std::string, std::size_t>> JsonOutput::output_size_t;
-    std::map<std::string, std::map<std::string, double>> JsonOutput::output_double;
-    std::map<std::string, std::map<std::string, mpz_class>> JsonOutput::output_mpz;
-
+    OutputMultiMap JsonOutput::output;
 
     const std::string JsonOutput::EMPTY;
     const std::string JsonOutput::PRE = "After_Preprocessing";
 
-    const std::string JsonOutput::to_string(htd::ITreeDecomposition *td) {
-        htd::PreOrderTreeTraversal traversal;
-        std::ostringstream out;
-
-        traversal.traverse(*td, [&](htd::vertex_t v, htd::vertex_t v2, size_t s) {
-            out << v << "[" << v2 << "]" << " @" << s << ": " << td->bagContent(v);
-        });
-
-        return out.str();
-    }
-
-    void JsonOutput::data(const std::string &key, htd::ITreeDecomposition *td) {
-        output_str[EMPTY].insert(std::make_pair(key, to_string(td)));
-        output.add(EMPTY, key, to_string(td));
-    }
-
-//    TODO: replace following by template
-//    template<typename T>
-//    void JsonOutput::data(const std::string &key, const T &value) {
-//        output.add(EMPTY, key, value);
-//    }
-
-    void JsonOutput::data(const std::string &key, const mpz_class &value) {
+    template<typename T>
+    void JsonOutput::data(const std::string &key, const T value) {
         output.add(EMPTY, key, value);
     }
 
-    void JsonOutput::data(const std::string &key, double value) {
-        output.add(EMPTY, key, value);
-    }
-
-    void JsonOutput::data(const std::string &key, const std::size_t value) {
-        output.add(EMPTY, key, value);
-    }
-
-    void JsonOutput::data(const std::string &key, const std::string &value) {
-        output.add(EMPTY, key, value);
-    }
-
-    void JsonOutput::data(const std::string &group, const std::string &key, htd::ITreeDecomposition *td) {
-        output.add(group, key, to_string(td));
-    }
-
-    void JsonOutput::data(const std::string &group, const std::string &key, double value) {
+    template<typename T>
+    void JsonOutput::data(const std::string &group, const std::string &key, const T value) {
         output.add(group, key, value);
     }
 
-    void JsonOutput::data(const std::string &group, const std::string &key, const std::size_t value) {
-        output.add(group, key, value);
-    }
-
-    void JsonOutput::preproc_data(const std::string &key, htd::ITreeDecomposition *td) {
-        output.add(PRE, key, to_string(td));
-    }
-
-    void JsonOutput::preproc_data(const std::string &key, const std::size_t value) {
+    template<typename T>
+    void JsonOutput::preproc_data(const std::string &key, const T value) {
         output.add(PRE, key, value);
     }
 
     void JsonOutput::info(htd::ITreeDecomposition *td) {
         //TODO: change to htd format here, so that we can reimport the decomposition
-        output.add(EMPTY, "decomposition", to_string(td));
+        output.add(EMPTY, "decomposition", td);
     }
 
     void JsonOutput::info(const std::string &value) {
         std::cerr << "# " << value << std::endl;
     }
 
+    template<typename T>
     void
-    JsonOutput::info(const std::string &key, const std::size_t value) {
+    JsonOutput::info(const std::string &key, const T value) {
         data(key, value);
     }
 
-    void JsonOutput::info(const std::string &key, const std::string &value) {
-        data(key, value);
+    void JsonOutput::debug(const std::string &value) {
+        std::cerr << "# " << value << std::endl;
     }
 
-    void JsonOutput::debug(const std::string &key, const std::size_t value) {
-        std::cerr << "# " << key << " " << value << std::endl;
-    }
-
-    void JsonOutput::debug(const std::string &key, const std::string &value) {
+    template<typename T>
+    void JsonOutput::debug(const std::string &key, const T value) {
         std::cerr << "# " << key << " " << value << std::endl;
     }
 
     void JsonOutput::debug(const std::string &value, htd::ITreeDecomposition *td) {
         std::cerr << "# " << value << to_string(td) << std::endl;
-    }
-
-    void JsonOutput::debug(const std::string &value) {
-        std::cerr << "# " << value << std::endl;
     }
 
     void JsonOutput::debug(const std::string &group, const std::string &key, const std::size_t value) {
@@ -151,22 +93,38 @@ namespace sharp {
         std::cerr << "# !! " << value << std::endl;
     }
 
-    void JsonOutput::print_value(multimap::ValidType validType, unsigned long index) {
+    const std::string JsonOutput::to_string(htd::ITreeDecomposition *td) {
+        htd::PreOrderTreeTraversal traversal;
+        std::ostringstream out;
+
+        traversal.traverse(*td, [&](htd::vertex_t v, htd::vertex_t v2, size_t s) {
+            out << v << "[" << v2 << "]" << " @" << s << ": " << td->bagContent(v);
+        });
+
+        return out.str();
+    }
+
+    void JsonOutput::print_value(OutputMultiMap::ValidType validType, unsigned long index) {
+        //TODO: improve multitype handling here
         switch (validType) {
-            case multimap::ValidType::DOUBLE:
+            case OutputMultiMap::ValidType::DOUBLE:
                 std::cout << output.get_double(index);
                 break;
-            case multimap::ValidType::MPZ:
+            case OutputMultiMap::ValidType::MPZ:
                 std::cout << output.get_mpz(index).get_str();
                 break;
-            case multimap::ValidType::SIZE_T:
+            case OutputMultiMap::ValidType::SIZE_T:
                 std::cout << output.get_size_t(index);
                 break;
-            case multimap::ValidType::STRING:
+            case OutputMultiMap::ValidType::STRING:
                 std::cout << "\"" << output.get_string(index) << "\"";
+                break;
+            case OutputMultiMap::ValidType::TDECOMP:
+                std::cout << "\"" << to_string(output.get_td(index)) << "\"";
                 break;
         }
     }
+
     void JsonOutput::exit(void) {
         std::cout << "{";
         for (auto it = output.begin(); it != output.end(); ++it) {
@@ -185,7 +143,6 @@ namespace sharp {
                 }
                 this->print_value(it2->second.first, it2->second.second);
 
-                //TODO: multiple data types looks nasty; improve
                 if (it->first != JsonOutput::EMPTY) {
                     std::cout << "]";
                 }

@@ -35,11 +35,11 @@ namespace sharp {
 
     class SHARP_API ISharpOutput {
     public:
-        virtual void data(const std::string &key, htd::ITreeDecomposition *td) = 0;
-
-        virtual void data(const std::string &key, const mpz_class &value) = 0;
-
         virtual void data(const std::string &key, const std::size_t value) = 0;
+
+        virtual void data(const std::string &key, const std::string &value)= 0;
+
+        virtual void data(const std::string &key, htd::ITreeDecomposition *td) = 0;
 
         virtual void data(const std::string &group, const std::string &key, htd::ITreeDecomposition *td) = 0;
 
@@ -47,7 +47,6 @@ namespace sharp {
 
         virtual void data(const std::string &group, const std::string &key, const std::size_t value) = 0;
 
-        virtual void data(const std::string &key, const std::string &value)= 0;
 
         virtual void preproc_data(const std::string &key, htd::ITreeDecomposition *td) = 0;
 
@@ -75,7 +74,7 @@ namespace sharp {
 
         virtual void error(const std::string &value)= 0;
 
-        virtual void exit(void){ std::cout<<"foobar"<<std::endl;};
+        virtual void exit(void) { std::cout << "foobar" << std::endl; };
     };
 }
 

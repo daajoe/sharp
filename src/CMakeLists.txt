@@ -39,7 +39,7 @@ set(SHARP_SOVERSION ${SHARP_SOVERSION_INTERFACE}.${SHARP_SOVERSION_REVISION}.${S
 
 file(GLOB_RECURSE HEADER_LIST ${PROJECT_SOURCE_DIR}/include/*.hpp)
 
-add_library(sharp ${SRC_LIST} ${HEADER_LIST})
+add_library(sharp ${SRC_LIST} ${HEADER_LIST} ../include/sharp/OutputMultiMap.hpp)
 target_link_libraries(sharp gmp)
 
 set_property(TARGET sharp PROPERTY CXX_STANDARD 11)
