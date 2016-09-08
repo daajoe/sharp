@@ -23,7 +23,7 @@ AM_SILENT_RULES([yes])
 
 # enable libtool to build libraries
 ###################################
-LT_PREREQ([2.2,2.3,2.4])		# minimum libtool version
+LT_PREREQ([2.2])		# minimum libtool version
 LT_INIT					# initialize libtool
 LT_LANG([C++])		 	# set libtool language(s)
 

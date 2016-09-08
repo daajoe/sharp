@@ -19,16 +19,16 @@ namespace sharp
 	public:
 		static ITreeSolver *treeSolver(
 				const htd::ITreeDecompositionAlgorithm &decomposer,
-				const ITreeAlgorithm &algorithm);
+				const ITreeAlgorithm &algorithm); 
 
 		static ITreeSolver *treeSolver(
 				const htd::ITreeDecompositionAlgorithm &decomposer,
 				const ITreeAlgorithm &algorithm1,
-				const ITreeAlgorithm &algorithm2);
+				const ITreeAlgorithm &algorithm2); 
 
 		static ITreeSolver *treeSolver(
 				const htd::ITreeDecompositionAlgorithm &decomposer,
-				const TreeAlgorithmVector &algorithms);
+				const TreeAlgorithmVector &algorithms); 
 
 		static ITreeSolver *treeSolver(
 				const htd::ITreeDecompositionAlgorithm &decomposer,

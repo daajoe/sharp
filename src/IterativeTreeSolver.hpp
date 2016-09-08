@@ -96,7 +96,7 @@ namespace sharp
 				const ITreeAlgorithm &algorithm,
 				const IInstance &instance,
 				INodeTableMap &tables) const;
-
+		
 		const htd::ITreeDecompositionAlgorithm &decomposer_;
 		TreeAlgorithmVector algorithms_;
 		const ITreeSolutionExtractor *extractor_;
