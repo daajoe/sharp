@@ -16,6 +16,8 @@
 #include <htd/WeakNormalizationOperation.hpp>
 #include <htd/LimitChildCountOperation.hpp>
 #include <htd/TreeDecompositionVerifier.hpp>
+#include "ExtendedLimitChildCountOperation.hpp"
+#include "HumanReadableExporter.hpp"
 
 #include <stack>
 #include <memory>
@@ -156,24 +158,37 @@ namespace sharp {
 
 //#define ITERATIVE_TD_IMPROVEMENT
 
-    ITreeDecomposition *IterativeTreeSolver::decompose(
-            const IInstance &instance, bool weak, unsigned int maxChilds, bool optimizedTD) const {
-        htd::ITreeDecomposition *td = nullptr;
-        unique_ptr<IHypergraph> hg(instance.toHypergraph());
-        //TODO: include preprocessingOperations in decomposition call
-        //		once libhtd supports this
+	template <class T>
+	void insertSorted(std::vector<T>& target, const std::vector<T>& source)
+	{
+		for (const auto& el : source)
+		{
+			auto it = std::upper_bound(target.cbegin(), target.cend(), el);
+			target.insert(it, el);
+		}
+	}
 
-        //#ifdef ITERATIVE_TD_IMPROVEMENT
-        if (optimizedTD) {
-            FitnessFunction fitnessFunction;
 
-            /**
-             *  This operation changes the root of a given decomposition so that the fitness function is maximized.
-             *
-             *  When no fitness function is provided, the optimization operation does not perform any optimization and only applies provided manipulations.
-             */
-            htd::TreeDecompositionOptimizationOperation *operation = new htd::TreeDecompositionOptimizationOperation(
-                    fitnessFunction);
+	ITreeDecomposition *IterativeTreeSolver::decompose(
+			const IInstance &instance, bool weak, unsigned int maxChilds, bool optimizedTD) const
+	{
+		htd::LibraryInstance* inst = htd::createManagementInstance(0);
+        	htd::ITreeDecomposition * td = nullptr;
+		unique_ptr<IHypergraph> hg(instance.toHypergraph());
+		//TODO: include preprocessingOperations in decomposition call
+		//		once libhtd supports this
+
+		//#ifdef ITERATIVE_TD_IMPROVEMENT
+		if (optimizedTD)
+		{
+        FitnessFunction fitnessFunction;
+
+        /**
+         *  This operation changes the root of a given decomposition so that the fitness function is maximized.
+         *
+         *  When no fitness function is provided, the optimization operation does not perform any optimization and only applies provided manipulations.
+         */
+        htd::TreeDecompositionOptimizationOperation * operation = new htd::TreeDecompositionOptimizationOperation(inst, fitnessFunction);
 
             /**
              *  Set the vertex selections strategy (default = exhaustive).
@@ -182,39 +197,41 @@ namespace sharp {
              */
             operation->setVertexSelectionStrategy(new htd::RandomVertexSelectionStrategy(10));
 
-            /**
-              * Set desired manipulations like in any other decomposition algorithm.
-              */
-            if (maxChilds >= 2)
-                operation->addManipulationOperation(new htd::LimitChildCountOperation(maxChilds));
-            if (weak)
-                operation->addManipulationOperation(new htd::WeakNormalizationOperation());
+        /**
+          * Set desired manipulations like in any other decomposition algorithm.
+          */
+	if (maxChilds >= 2)
+		operation->addManipulationOperation(new htd::LimitChildCountOperation(inst, maxChilds));
+	if (weak)
+		operation->addManipulationOperation(new htd::WeakNormalizationOperation(inst));
 
             //operation->addManipulationOperation(new htd::NormalizationOperation(true, true, false, false));
 
-            /**
-              * In case one uses htd::IterativeImprovementTreeDecompositionAlgorithm,
-              * I recommend to use htd::MinFillOrderingAlgorithm() as it allows for
-              * more randomness.
-              */
-            htd::OrderingAlgorithmFactory::instance().setConstructionTemplate(new htd::MinFillOrderingAlgorithm());
+        /**
+          * In case one uses htd::IterativeImprovementTreeDecompositionAlgorithm,
+          * I recommend to use htd::MinFillOrderingAlgorithm() as it allows for
+          * more randomness.
+          */
+        //htd::OrderingAlgorithmFactory::instance().setConstructionTemplate(new htd::MinFillOrderingAlgorithm());
+        htd::OrderingAlgorithmFactory(inst).setConstructionTemplate(new htd::MinFillOrderingAlgorithm(inst));
 
-            /**
-             *  Get the default tree decomposition algorithm.
-             */
-            htd::ITreeDecompositionAlgorithm *baseAlgorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
+        /**
+         *  Get the default tree decomposition algorithm.
+         */
+        htd::ITreeDecompositionAlgorithm * baseAlgorithm = htd::TreeDecompositionAlgorithmFactory(inst).getTreeDecompositionAlgorithm();
+        //htd::ITreeDecompositionAlgorithm * baseAlgorithm = htd::TreeDecompositionAlgorithmFactory::instance().getTreeDecompositionAlgorithm();
 
             /**
              *  Set the optimization operation as manipulation operation.
              */
             baseAlgorithm->addManipulationOperation(operation);
 
-            /**
-             *  Create a new instance of htd::IterativeImprovementTreeDecompositionAlgorithm based on the base algorithm and the fitness function.
-             *
-             *  Note that the fitness function can be an arbiraty one and can differ from the one used in the optimization operation.
-             */
-            htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(baseAlgorithm, fitnessFunction);
+        /**
+         *  Create a new instance of htd::IterativeImprovementTreeDecompositionAlgorithm based on the base algorithm and the fitness function.
+         *
+         *  Note that the fitness function can be an arbiraty one and can differ from the one used in the optimization operation.
+         */
+        htd::IterativeImprovementTreeDecompositionAlgorithm algorithm(inst, baseAlgorithm, fitnessFunction);
 
             /**
              *  Set the maximum number of iterations after which the best decomposition with respect to the fitness function shall be returned.
@@ -232,65 +249,160 @@ namespace sharp {
 
             std::size_t optimalBagSize = (std::size_t) -1;
 
-            /**
-             *  Compute the decomposition. Note that the additional, optional parameter for computeDecomposition() in case
-             *  of htd::IterativeImprovementTreeDecompositionAlgorithm can be used to intercept every new decomposition.
-             *  In this case we output some intermediate information upon perceiving a new best width.
-             */
-            td =
-                    algorithm.computeDecomposition(*hg, [&](const htd::IMultiHypergraph &graph,
-                                                            const htd::ITreeDecomposition &decomposition,
-                                                            const htd::FitnessEvaluation &fitness) {
-                        HTD_UNUSED(graph)
-                        HTD_UNUSED(decomposition)
+        /**
+         *  Compute the decomposition. Note that the additional, optional parameter for computeDecomposition() in case
+         *  of htd::IterativeImprovementTreeDecompositionAlgorithm can be used to intercept every new decomposition.
+         *  In this case we output some intermediate information upon perceiving a new best width.
+         */
+       	td =
+            algorithm.computeDecomposition(*hg, [&](const htd::IMultiHypergraph & graph, const htd::ITreeDecomposition & decomposition, const htd::FitnessEvaluation & fitness)
+        {
+            HTD_UNUSED(graph)
+            HTD_UNUSED(decomposition)
 
-                        std::size_t bagSize = -fitness.at(0);
+            std::size_t bagSize = -fitness.at(0);
 
-                        if (bagSize < optimalBagSize) {
-                            optimalBagSize = bagSize;
+            if (bagSize < optimalBagSize)
+            {
+                optimalBagSize = bagSize;
 
-                            std::chrono::milliseconds::rep msSinceEpoch =
-                                    std::chrono::duration_cast<std::chrono::milliseconds>
-                                            (std::chrono::system_clock::now().time_since_epoch()).count();
+                std::chrono::milliseconds::rep msSinceEpoch =
+                    std::chrono::duration_cast<std::chrono::milliseconds>
+                            (std::chrono::system_clock::now().time_since_epoch()).count();
 
-                            Benchmark::output()->debug("status", "optimalBagSize", optimalBagSize);
-                            Benchmark::output()->debug("status", "msSinceEpoch", msSinceEpoch);
-                        }
-                    });
-        }
-        else {
+                Benchmark::output()->debug("status", "optimalBagSize", optimalBagSize);
+                Benchmark::output()->debug("status", "msSinceEpoch", msSinceEpoch);
+            }
+        });
+		}	
+		else {
+		
+		td = decomposer_.computeDecomposition(*hg);
 
-            td = decomposer_.computeDecomposition(*hg);
+		//#define PRINT_DECOMP
+		#ifdef PRINT_DECOMP
             Benchmark::output()->debug("before normalization", td);
+		#endif
 
-            //TODO: remove joinnodereplacementoperation
-            //htd::JoinNodeReplacementOperation j;
-            //j.apply(htd::TreeDecompositionFactory::instance().accessMutableTreeDecomposition(*td));
+		//TODO: remove joinnodereplacementoperation
+		//htd::JoinNodeReplacementOperation j;
+		//j.apply(htd::TreeDecompositionFactory::instance().accessMutableTreeDecomposition(*td));
+	
+		htd::WeakNormalizationOperation js(inst);
+		htd::LimitChildCountOperation js2(inst, maxChilds);
+		htd::ExtendedLimitChildCountOperation js3(inst, maxChilds);
+		//htd::SemiNormalizationOperation js2;
 
-            htd::WeakNormalizationOperation js;
-            htd::LimitChildCountOperation js2(maxChilds);
-            //htd::SemiNormalizationOperation js2;
+		if (!weak && maxChilds == 2)
+			js3.apply(*hg, htd::TreeDecompositionFactory(inst).accessMutableTreeDecomposition(*td));
+		else if (maxChilds >= 2)
+			js2.apply(*hg, htd::TreeDecompositionFactory(inst).accessMutableTreeDecomposition(*td));
+			//js2.apply(*hg, htd::TreeDecompositionFactory::instance().accessMutableTreeDecomposition(*td));
+		if (weak)
+			js.apply(*hg, htd::TreeDecompositionFactory(inst).accessMutableTreeDecomposition(*td));
+			//js.apply(*hg, htd::TreeDecompositionFactory::instance().accessMutableTreeDecomposition(*td));
 
-            if (maxChilds >= 2)
-                js2.apply(*hg, htd::TreeDecompositionFactory::instance().accessMutableTreeDecomposition(*td));
-            if (weak)
-                js.apply(*hg, htd::TreeDecompositionFactory::instance().accessMutableTreeDecomposition(*td));
+		/*if (!weak && maxChilds == 2)	//TODO: manage induced edges
+		{
+			traversal.traverse(*td, [&](htd::vertex_t v, htd::vertex_t v2, size_t s){ std::cout << v << "[" << v2 << "]" << " @" << s << ": " << td->bagContent(v) << std::endl; });
+			auto& tdm = htd::TreeDecompositionFactory(inst).accessMutableTreeDecomposition(*td);
+			htd::PostOrderTreeTraversal fixJoin;
+			std::vector<htd::vertex_t> bagNotFound, bag;
+			std::unordered_set<htd::vertex_t> joinSeen, done;
+			htd::vertex_t rememb = htd::Vertex::UNKNOWN;
+			bool root = false, init = false;
+			fixJoin.traverse(*td, [&](htd::vertex_t v, htd::vertex_t v2, size_t) {
+				assert(!root);
+				if ((rememb != htd::Vertex::UNKNOWN) || (v2 != htd::Vertex::UNKNOWN && td->childCount(v2) == 2 && !(init = (bag == td->bagContent(v2))) && bagNotFound.size() > 0))	//new JOIN node
+				{
+					if (rememb == htd::Vertex::UNKNOWN)
+						rememb = v2;
 
-            htd::TreeDecompositionVerifier v;
-            assert(v.verify(*hg, *td));
-//            const ISharpOutput *out_ = Benchmark::output();
+					std::cout << "insert node of parent " << rememb << std::endl;
+					//add introduce node
+					htd::vertex_t c = tdm.addChild(rememb);
+					tdm.mutableBagContent(c) = bag; //tdm.bagContent(td->childAtPosition(rememb, 0));
+					//TODO: set induced edges (previously fetched)
+					//insert sorted
+					//insertSorted(tdm.mutableBagContent(c), bagNotFound);
+					tdm.setParent(td->childAtPosition(rememb, joinSeen.count(td->childAtPosition(rememb, 0)) == 1  ? 0 : 1), c);
+
+					bagNotFound.clear();
+					init = false;
+					rememb = htd::Vertex::UNKNOWN;
+				}
+				if (v2 != htd::Vertex::UNKNOWN && td->childCount(v2) == 2)
+				{
+					assert(rememb == htd::Vertex::UNKNOWN);
+					std::vector<htd::vertex_t> bagTmp = bagNotFound;
+					if (!init) // && td->childAtPosition(v2, 1) == v && !init)	//first child of first join node chain
+					{
+						init = true;
+						bagTmp = td->bagContent(v2);
+						bag = bagTmp;
+						//TODO: fetch induced edges
+					}
+					std::cout << "backTmp for " << v << " of join " << v2 << " with result " << bagTmp << std::endl;
+					if (bagTmp.size() > 0)
+					{
+						const auto &bag2 = td->bagContent(v);
+						bagNotFound.clear();
+						std::set_difference(bagTmp.begin(), bagTmp.end(), bag2.begin(), bag2.end(), std::back_inserter(bagNotFound));
+						std::cout << "back inserting for " << v << " of join " << v2 << " with result " << bagNotFound << std::endl;
+					}
+					if ((done.count(td->childAtPosition(v2, 0)) || done.count(td->childAtPosition(v2, 1))) && bagNotFound.size() > 0)	//end child
+					{
+						joinSeen.insert(v2);
+						bagTmp.clear();
+						const auto &bag = td->bagContent(v2);
+						std::set_difference(bag.begin(), bag.end(), bagNotFound.begin(), bagNotFound.end(), std::back_inserter(bagTmp));
+						std::cout << "set content of " << v2 << " to " << bagTmp << std::endl;
+						tdm.mutableBagContent(v2) = bagTmp;
+						//TODO: restrict induced edges
+						done.erase(td->childAtPosition(v2, 0));
+						done.erase(td->childAtPosition(v2, 1));
+					}
+					else
+						done.insert(v);
+				}
+				else if (v2 != htd::Vertex::UNKNOWN && rememb == htd::Vertex::UNKNOWN && td->childCount(v2) == 1 && bagNotFound.size() > 0)
+				{
+					rememb = v2;
+				}
+				else if (v2 == htd::Vertex::UNKNOWN && td->childCount(v) == 2 && bagNotFound.size() > 0)	//ROOT case
+				{
+					std::cout << "insert new parent for old root " << v << std::endl;
+					htd::vertex_t c = tdm.addParent(v);
+					tdm.mutableBagContent(c) = bag; //td->bagContent(v);
+					//insertSorted(tdm.mutableBagContent(c), bagNotFound);
+					//insert sorted
+					root = true;
+					//bagNotFound.clear();
+				}
+			});
+		}*/
+
+		#ifdef PRINT_DECOMP
             Benchmark::output()->debug("after normalization", td);
-        }
+		#endif
+            Benchmark::output()->data("Dynamic-1","decomposition", td);
+		htd::TreeDecompositionVerifier v;
+		if (!v.verify(*hg, *td))
+                {
+                    Benchmark::output()->debug("vertices", v.violationsVertexExistence(*hg, *td));
+                    Benchmark::output()->debug("edges", v.violationsHyperedgeCoverage(*hg, *td));
+                    Benchmark::output()->debug("connectedness",v.violationsConnectednessCriterion(*hg, *td));
 
-        Benchmark::output()->data("Dynamic-1","decomposition", td);
-
-//        Benchmark::output()->info(td);
-
-        Benchmark::registerTimestamp("tree decomposition time");
-        assert(td->maximumBagSize() <= 15);
-        //assert(td->maximumBagSize() - 1 <= 15);
-        return td;
-    }
+			htd_main::HumanReadableExporter exp;
+			exp.write(*td, *hg, std::cout);
+			assert(v.verify(*hg, *td));
+		}
+		}
+		Benchmark::registerTimestamp("tree decomposition time");
+		assert(td->maximumBagSize() <= 15);
+		//assert(td->maximumBagSize() - 1 <= 15);
+		return td;
+	}
 
     ISolution *IterativeTreeSolver::solve(
             const IInstance &instance,
