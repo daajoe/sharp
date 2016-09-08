@@ -40,6 +40,7 @@ CPackConfig.cmake
 CPackSourceConfig.cmake
 CTestTestfile.cmake
 DartConfiguration.tcl
+install_manifest.txt
 
 #libs
 lib/
