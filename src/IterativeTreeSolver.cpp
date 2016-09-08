@@ -22,7 +22,7 @@
 #include <stack>
 #include <memory>
 #include <cstddef>
-
+#include <sstream>
 
 #include <htd/main.hpp>
 #include <chrono>
@@ -389,9 +389,16 @@ namespace sharp {
 		htd::TreeDecompositionVerifier v;
 		if (!v.verify(*hg, *td))
                 {
-                    Benchmark::output()->debug("vertices", v.violationsVertexExistence(*hg, *td));
-                    Benchmark::output()->debug("edges", v.violationsHyperedgeCoverage(*hg, *td));
-                    Benchmark::output()->debug("connectedness",v.violationsConnectednessCriterion(*hg, *td));
+
+                    std::ostringstream ostreamVertices;
+                    ostreamVertices <<  v.violationsVertexExistence(*hg, *td);
+                    Benchmark::output()->debug("vertices", ostreamVertices.str());
+                    std::ostringstream ostreamEdges;
+                    ostreamEdges << v.violationsHyperedgeCoverage(*hg, *td);
+                    Benchmark::output()->debug("edges", ostreamEdges.str());
+                    std::ostringstream ostreamConnectedness;
+                    ostreamConnectedness << v.violationsConnectednessCriterion(*hg, *td);
+                    Benchmark::output()->debug("connectedness",ostreamConnectedness.str());
 
 			htd_main::HumanReadableExporter exp;
 			exp.write(*td, *hg, std::cout);
