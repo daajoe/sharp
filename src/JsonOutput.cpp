@@ -38,18 +38,40 @@ namespace sharp {
     const std::string JsonOutput::EMPTY;
     const std::string JsonOutput::PRE = "After_Preprocessing";
 
-    template<typename T>
-    void JsonOutput::data(const std::string &key, const T value) {
+    void JsonOutput::data(const std::string &key, const std::size_t value) {
         output.add(EMPTY, key, value);
     }
 
-    template<typename T>
-    void JsonOutput::data(const std::string &group, const std::string &key, const T value) {
+    void JsonOutput::data(const std::string &key, const std::string &value) {
+        output.add(EMPTY, key, value);
+    }
+
+    void JsonOutput::data(const std::string &key, const mpz_class &value) {
+        output.add(EMPTY, key, value);
+    }
+
+    void JsonOutput::data(const std::string &key, htd::ITreeDecomposition *value) {
+        output.add(EMPTY, key, value);
+    }
+
+    void JsonOutput::data(const std::string &group, const std::string &key, double value) {
         output.add(group, key, value);
     }
 
-    template<typename T>
-    void JsonOutput::preproc_data(const std::string &key, const T value) {
+    void JsonOutput::data(const std::string &group, const std::string &key, const std::size_t value) {
+        output.add(group, key, value);
+    }
+
+
+    void JsonOutput::data(const std::string &group, const std::string &key, htd::ITreeDecomposition *td) {
+        output.add(group, key, td);
+    }
+
+    void JsonOutput::preproc_data(const std::string &key, htd::ITreeDecomposition *td) {
+        output.add(PRE, key, td);
+    }
+
+    void JsonOutput::preproc_data(const std::string &key, const std::size_t value) {
         output.add(PRE, key, value);
     }
 
@@ -62,9 +84,11 @@ namespace sharp {
         std::cerr << "# " << value << std::endl;
     }
 
-    template<typename T>
-    void
-    JsonOutput::info(const std::string &key, const T value) {
+    void JsonOutput::info(const std::string &key, const std::size_t value) {
+        data(key, value);
+    }
+
+    void JsonOutput::info(const std::string &key, const std::string &value) {
         data(key, value);
     }
 
@@ -72,8 +96,11 @@ namespace sharp {
         std::cerr << "# " << value << std::endl;
     }
 
-    template<typename T>
-    void JsonOutput::debug(const std::string &key, const T value) {
+    void JsonOutput::debug(const std::string &key, const std::size_t value) {
+        std::cerr << "# " << key << " " << value << std::endl;
+    }
+
+    void JsonOutput::debug(const std::string &key, const std::string &value) {
         std::cerr << "# " << key << " " << value << std::endl;
     }
 
@@ -162,6 +189,7 @@ namespace sharp {
         std::cout << "}" << std::endl;
 
     }
+
 }
 
 

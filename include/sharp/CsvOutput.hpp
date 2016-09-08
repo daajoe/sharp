@@ -69,6 +69,7 @@ namespace sharp {
         void warning(const std::string &value);
 
         void error(const std::string &value);
+        
     };
 }
 
