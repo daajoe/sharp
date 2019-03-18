@@ -2,7 +2,7 @@
 #	include <config.h>
 #endif
 
-#include "IterativeTreeSolver.hpp"
+#include "IterativeTreeMixedTraversalSolver.hpp"
 #include "IterativeTreeTupleSolver.hpp"
 #include "InterleavedTreeAlgorithm.hpp"
 #include "InterleavedTreeTupleAlgorithm.hpp"
@@ -17,7 +17,7 @@ namespace sharp
 			const ITreeDecompositionAlgorithm &decomposer,
 			const ITreeAlgorithm &algorithm)
 	{
-		return new IterativeTreeSolver(decomposer, algorithm);
+		return new IterativeTreeMixedTraversalSolver(decomposer, algorithm);
 	}
 
 	ITreeSolver *create::treeSolver(
@@ -25,14 +25,14 @@ namespace sharp
 			const ITreeAlgorithm &algorithm1,
 			const ITreeAlgorithm &algorithm2)
 	{
-		return new IterativeTreeSolver(decomposer, algorithm1, algorithm2);
+		return new IterativeTreeMixedTraversalSolver(decomposer, algorithm1, algorithm2);
 	}
 
 	ITreeSolver *create::treeSolver(
 			const ITreeDecompositionAlgorithm &decomposer,
 			const TreeAlgorithmVector &algorithms)
 	{
-		return new IterativeTreeSolver(decomposer, algorithms);
+		return new IterativeTreeMixedTraversalSolver(decomposer, algorithms);
 	}
 
 	ITreeSolver *create::treeSolver(
@@ -40,7 +40,7 @@ namespace sharp
 			const ITreeAlgorithm &algorithm,
 			const ITreeSolutionExtractor &extractor)
 	{
-		return new IterativeTreeSolver(decomposer, algorithm, extractor);
+		return new IterativeTreeMixedTraversalSolver(decomposer, algorithm, extractor);
 	}
 
 	ITreeSolver *create::treeSolver(
@@ -49,7 +49,7 @@ namespace sharp
 			const ITreeAlgorithm &alg2,
 			const ITreeSolutionExtractor &extractor)
 	{
-		return new IterativeTreeSolver(decomposer, alg1, alg2, extractor);
+		return new IterativeTreeMixedTraversalSolver(decomposer, alg1, alg2, extractor);
 	}
 
 	ITreeSolver *create::treeSolver(
@@ -57,7 +57,7 @@ namespace sharp
 			const TreeAlgorithmVector &algorithms,
 			const ITreeSolutionExtractor &extractor)
 	{
-		return new IterativeTreeSolver(decomposer, algorithms, extractor);
+		return new IterativeTreeMixedTraversalSolver(decomposer, algorithms, extractor);
 	}
 
 	ITreeSolver *create::treeSolver(

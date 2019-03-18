@@ -38,7 +38,7 @@ namespace sharp
 				ITupleSet &outputTuples) const = 0;
 
 		virtual bool needAllTupleSets() const = 0;
-
+		virtual void onExit() const {}
 	}; // class ITreeTupleAlgorithm
 
 	inline ITreeTupleAlgorithm::~ITreeTupleAlgorithm() { }

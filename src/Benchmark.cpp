@@ -17,6 +17,9 @@ namespace sharp
 {
 	bool Benchmark::exit = false;
 	std::mutex Benchmark::lock;
+	int Benchmark::idv = 0;
+	unsigned Benchmark::ord = 0;
+	std::string Benchmark::fold = "";
 
 	using std::deque;
 	using std::string;

@@ -1,6 +1,8 @@
 #ifndef SHARP_LIBSHARP_GLOBAL_H_
 #define SHARP_LIBSHARP_GLOBAL_H_
 
+#define HEUR_OUTPUT
+
 // Generic helper definitions for shared library support
 #if defined _WIN32 || defined __CYGWIN__
   #define SHARP_HELPER_IMPORT __declspec(dllimport)

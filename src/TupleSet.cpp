@@ -81,6 +81,28 @@ namespace sharp
 		return iterator(new Enum(set_.begin() + i, set_.end()));
 	}
 
+	TupleSet::iterator TupleSet::findValue(const ITuple &tuple)
+	{
+		size_t i;
+		for(i = 0; i < set_.size(); ++i)
+			if(*set_[i] == tuple)
+				break;
+
+		return iterator(new Enum(set_.begin() + i, set_.end()));
+	}
+
+	pair<TupleSet::iterator, bool> TupleSet::insertNonDup(ITuple *tuple)
+	{
+		//FIXME: double inserts
+		size_t i;
+		for(i = 0; i < set_.size(); ++i)
+			if((*set_[i]) == *tuple)
+				break;
+		return make_pair(iterator(new Enum(
+						set_.begin() + i, set_.end())), false);
+	}
+
+
 	TupleSet::size_type TupleSet::size() const
 	{
 		return set_.size();

@@ -25,6 +25,7 @@
 #ifndef SHARP_OUTPUTMULTIMAP_H
 #define SHARP_OUTPUTMULTIMAP_H
 
+#include <cstddef>
 #include <sharp/OutputMultiMap.hpp>
 
 #include <sharp/global>

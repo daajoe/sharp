@@ -36,7 +36,9 @@ namespace sharp
 				const IInstance &instance) const = 0;
 
 		virtual bool needAllTables() const = 0;
-
+		
+		virtual bool isBottomUp() const { return true; }
+		virtual void onExit() const {}
 	}; // class ITreeAlgorithm
 
 	inline ITreeAlgorithm::~ITreeAlgorithm() { }

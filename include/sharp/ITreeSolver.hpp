@@ -9,6 +9,15 @@
 
 namespace sharp
 {
+
+	class SHARP_API ITreeDecompositionEvaluator
+	{
+		public:
+			virtual htd::FitnessEvaluation* evaluate(const htd::IMultiHypergraph&, const htd::ITreeDecomposition &) const { return nullptr; }
+			virtual void select() const {};
+			virtual ~ITreeDecompositionEvaluator() = 0;
+	};
+	
 	class SHARP_API ITreeSolver : public ISolver
 	{
 	protected:
@@ -18,7 +27,7 @@ namespace sharp
 		virtual ~ITreeSolver() = 0;
 
 		virtual htd::ITreeDecomposition *decompose(
-				const IInstance &instance, bool weak, unsigned int maxChild, bool optimizeTD) const = 0;
+				const IInstance &instance, bool weak, unsigned int maxChild, unsigned optimizeTD, const ITreeDecompositionEvaluator* eval = nullptr) const = 0;
 
 		virtual ISolution *solve(
 				const IInstance &instance,
@@ -27,6 +36,7 @@ namespace sharp
 	}; // class ITreeSolver
 
 	inline ITreeSolver::~ITreeSolver() { }
+	inline ITreeDecompositionEvaluator::~ITreeDecompositionEvaluator() { }
 } // namespace sharp
 
 #endif // SHARP_SHARP_ITREESOLVER_H_

@@ -16,12 +16,14 @@ namespace sharp
 		virtual ~TupleSet();
 
 		virtual std::pair<iterator, bool> insert(ITuple *tuple);
+		virtual std::pair<iterator, bool> insertNonDup(ITuple *tuple);
 		virtual size_type erase(const ITuple &tuple);
 		virtual void erase(const size_t pos);
 		virtual IEnumerator<ITuple> *enumerate();
 		virtual iterator begin();
 		virtual iterator end();
 		virtual iterator find(const ITuple &tuple);
+		virtual iterator findValue(const ITuple &tuple);
 
 		virtual size_type size() const;
 		virtual ITuple* operator[](int pos);

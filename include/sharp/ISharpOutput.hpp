@@ -24,10 +24,10 @@
 #ifndef SHARP_SHARP_SHARPOUTPUT_H_
 #define SHARP_SHARP_SHARPOUTPUT_H_
 
+#include <cstddef>
 #include <sharp/global>
 #include <string>
 #include <gmpxx.h>
-
 
 #include <htd/TreeDecompositionFactory.hpp>
 
